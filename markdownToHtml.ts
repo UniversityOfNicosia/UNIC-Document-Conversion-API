@@ -1,6 +1,15 @@
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 
+/**
+ * This function converts a markdown string to a HTML string,
+ * leveraging the `markdown-it` library for the markdown to HTML conversion
+ * and the `highlight.js` library for syntax highlighting.
+ *
+ * @param {string} markdownString - The markdown string to convert to .doc file.
+ *
+ * @returns {string} - The HTML string that was converted from the markdown string.
+ */
 export function convertMarkdownToHtml(markdownString: string): string {
   var md: MarkdownIt = new MarkdownIt({
     highlight: function (str, lang) {

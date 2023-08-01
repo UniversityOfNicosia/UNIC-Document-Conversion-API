@@ -15,7 +15,16 @@ function contentLimiter(y: number, slide: any, pptx: any, lines: number = 0) {
     return { y, slide };
 }
 
-// This function will add a text to the slide, and will return the new y position
+/**
+ * This function converts a markdown string to a PowerPoint presentation (.pptx file),
+ * leveraging the `markdownToHtml` function for the markdown to HTML conversion,
+ * and the `pptxgenjs` library for the PowerPoint presentation creation.
+ * 
+ * @param {string} markdownString - The markdown string to convert to .pptx file.
+ * @param {string} fileName - The name of the output .pptx file (default value is 'presentation.pptx').
+ * 
+ * @returns {void} - The .pptx file that was created from the markdown string.
+ */
 export function exportToPptx(markdownString: string, fileName = 'presentation.pptx') {
     const htmlString = convertMarkdownToHtml(markdownString);
     const parser = new DOMParser();
