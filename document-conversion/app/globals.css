@@ -48,6 +48,22 @@ textarea.markdown {
   box-sizing: border-box;
 }
 
+.export-btn {
+  display: block;
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.export-btn:hover {
+  background-color: #0058c8;
+}
+
 h1 {
   font-size: 2em;
   margin: 0.67em 0;

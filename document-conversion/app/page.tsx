@@ -24,6 +24,11 @@ export default function Home() {
           value={markdown}
           onChange={(e) => setMarkdown(e.target.value)}
         />
+
+        <button onClick={handleExport} className="export-btn mt-3">
+          Export Markdown
+        </button>
+
         <article className="preview">
           <ReactMarkdown 
             remarkPlugins={[gfm]}

@@ -51,69 +51,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         });
         break;
 
-      case "ul":
-      case "ol":
-        requests.push({
-          createParagraphBullets: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            bulletPreset:
-              node.nodeName.toLowerCase() === "ul"
-                ? "BULLET_DISC_CIRCLE_SQUARE"
-                : "NUMBERED_DECIMAL_NESTED",
-          },
-        });
-        break;
-
-      case "a":
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              link: {
-                url: node.href,
-              },
-            },
-            fields: "link",
-          },
-        });
-        break;
-
-      case "strong":
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              bold: true,
-            },
-            fields: "bold",
-          },
-        });
-        break;
-
-      case "em":
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              italic: true,
-            },
-            fields: "italic",
-          },
-        });
-        break;
-
       case "pre":
       case "code":
         requests.push({
@@ -143,6 +80,91 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
               },
             },
             fields: "weightedFontFamily",
+          },
+        });
+
+        // Block quote
+        requests.push({
+          updateParagraphStyle: {
+            range: {
+              startIndex: currentIndex,
+              endIndex: endIndexOfContent,
+            },
+            paragraphStyle: {
+              indentStart: {
+                magnitude: 36,
+                unit: "PT",
+              },
+            },
+            fields: "indentStart",
+          },
+        });
+        break;
+
+      case "blockquote":
+        requests.push({
+          updateParagraphStyle: {
+            range: {
+              startIndex: currentIndex,
+              endIndex: endIndexOfContent,
+            },
+            paragraphStyle: {
+              namedStyleType: "NORMAL_TEXT",
+            },
+            fields: "namedStyleType",
+          },
+        });
+
+        // Italic
+        requests.push({
+          updateTextStyle: {
+            range: {
+              startIndex: currentIndex,
+              endIndex: endIndexOfContent,
+            },
+            textStyle: {
+              italic: true,
+            },
+            fields: "italic",
+          },
+        });
+
+        // Indentation
+        requests.push({
+          updateParagraphStyle: {
+            range: {
+              startIndex: currentIndex,
+              endIndex: endIndexOfContent,
+            },
+            paragraphStyle: {
+              indentStart: {
+                magnitude: 36,
+                unit: "PT",
+              },
+            },
+            fields: "indentStart",
+          },
+        });
+
+        // Color
+        requests.push({
+          updateTextStyle: {
+            range: {
+              startIndex: currentIndex,
+              endIndex: endIndexOfContent,
+            },
+            textStyle: {
+              foregroundColor: {
+                color: {
+                  rgbColor: {
+                    red: 0.2,
+                    green: 0.2,
+                    blue: 0.2,
+                  },
+                },
+              },
+            },
+            fields: "foregroundColor",
           },
         });
         break;
