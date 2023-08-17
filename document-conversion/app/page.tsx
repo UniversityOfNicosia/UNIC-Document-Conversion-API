@@ -13,7 +13,16 @@ import gfm from "remark-gfm";
  * render the markdown text with syntax highlighting.
  */
 export default function Home() {
-  const [markdown, setMarkdown] = useState('# markdown preview')
+  const [markdown, setMarkdown] = useState('# markdown preview');
+  const [fileName, setFileName] = useState('default');
+
+  const handleExport = () => {
+    const generatedFileName = `markdown_${Date.now()}`;
+    setFileName(generatedFileName);
+
+    window.open(`/api/startOAuth?content=${encodeURIComponent(markdown)}&fileName=${encodeURIComponent(generatedFileName)}`, '_blank');
+  }
+
   return (
     <main>
       <section className="markdown  mx-auto p-4">
