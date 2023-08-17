@@ -5,13 +5,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import gfm from "remark-gfm";
 
-/**
- * This function is used to edit the markdown text and display the preview,
- * leveraging the 'react-markdown' library to render the markdown text,
- * the 'remark-gfm' library to render the markdown text with GitHub Flavored
- * Markdown (GFM) support, and the 'react-syntax-highlighter' library to
- * render the markdown text with syntax highlighting.
- */
 export default function Home() {
   const [markdown, setMarkdown] = useState('# markdown preview');
   const [fileName, setFileName] = useState('default');
@@ -25,29 +18,28 @@ export default function Home() {
 
   return (
     <main>
-      <section className="markdown  mx-auto p-4">
+      <section className="markdown mx-auto p-4">
         <textarea 
           className="markdown"
           value={markdown}
           onChange={(e) => setMarkdown(e.target.value)}
-        >
-        </textarea>
+        />
         <article className="preview">
           <ReactMarkdown 
-            children={markdown}
             remarkPlugins={[gfm]}
             components={{
               code({node, inline, className, children, ...props}) {
                 const match = /language-(\w+)/.exec(className || '')
                 return !inline && match ? (
                   <SyntaxHighlighter
-                    children={String(children).replace(/\n$/, '')}
-                    style={dark}
+                    style={dark as any}
                     language={match[1]}
                     PreTag="div"
                     wrapLongLines={true}
                     {...props}
-                  />
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
                 ) : (
                   <code className={className} {...props}>
                     {children}
@@ -55,7 +47,9 @@ export default function Home() {
                 )
               }
             }}
-          />
+          >
+            {markdown}
+          </ReactMarkdown>
         </article>
       </section>
     </main>
