@@ -1,6 +1,8 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic='force-dynamic';
+
 const OAUTH2_CLIENT_ID = process.env.GOOGLE_OAUTH2_CLIENT_ID;
 const OAUTH2_CLIENT_SECRET = process.env.GOOGLE_OAUTH2_CLIENT_SECRET;
 const REDIRECT_URI = "http://localhost:3000/api/endOAuth";
