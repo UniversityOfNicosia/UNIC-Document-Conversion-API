@@ -1,26 +1,16 @@
-import { convertMarkdownToHtml } from "./../../../utils/markdownToHtml";
-import { JSDOM } from "jsdom";
-
 export async function exportToGDoc(markdownString, title = "Document", docs) {
-  const htmlString = convertMarkdownToHtml(markdownString);
-  const { window } = new JSDOM(htmlString);
-  const document = window.document;
-
-  const bodyElements = Array.from(document.body.children);
+  let currentIndex = 1;
+  let requests = [];
 
   const doc = await docs.documents.create({ requestBody: { title } });
   const documentId = doc.data.documentId;
 
-  let parsedContent = [];
+  const lines = markdownString.split(/\n/);
 
-  let requests = [];
-  let currentIndex = 1;
-
-  bodyElements.forEach((node) => {
-    let textContent = node.textContent + "\n";
+  lines.forEach((line) => {
+    let textContent = line + "\n";
     let endIndexOfContent = currentIndex + textContent.length;
 
-    // Step 1: Insert text
     requests.push({
       insertText: {
         location: { index: currentIndex },
@@ -28,149 +18,27 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       },
     });
 
-    // Step 2: Apply formatting based on the tag
-    switch (node.nodeName.toLowerCase()) {
-      case "h1":
-      case "h2":
-      case "h3":
-      case "h4":
-      case "h5":
-      case "h6":
-        const headingLevel = parseInt(node.nodeName[1]);
-        requests.push({
-          updateParagraphStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            paragraphStyle: {
-              namedStyleType: `HEADING_${headingLevel}`,
-            },
-            fields: "namedStyleType",
-          },
-        });
-        break;
-
-      case "pre":
-      case "code":
-        requests.push({
-          updateParagraphStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            paragraphStyle: {
-              namedStyleType: "NORMAL_TEXT",
-            },
-            fields: "namedStyleType",
-          },
-        });
-
-        // Monospace font
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              weightedFontFamily: {
-                fontFamily: "Courier New",
-                weight: 400,
-              },
-            },
-            fields: "weightedFontFamily",
-          },
-        });
-
-        // Block quote
-        requests.push({
-          updateParagraphStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            paragraphStyle: {
-              indentStart: {
-                magnitude: 36,
-                unit: "PT",
-              },
-            },
-            fields: "indentStart",
-          },
-        });
-        break;
-
-      case "blockquote":
-        requests.push({
-          updateParagraphStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            paragraphStyle: {
-              namedStyleType: "NORMAL_TEXT",
-            },
-            fields: "namedStyleType",
-          },
-        });
-
-        // Italic
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              italic: true,
-            },
-            fields: "italic",
-          },
-        });
-
-        // Indentation
-        requests.push({
-          updateParagraphStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            paragraphStyle: {
-              indentStart: {
-                magnitude: 36,
-                unit: "PT",
-              },
-            },
-            fields: "indentStart",
-          },
-        });
-
-        // Color
-        requests.push({
-          updateTextStyle: {
-            range: {
-              startIndex: currentIndex,
-              endIndex: endIndexOfContent,
-            },
-            textStyle: {
-              foregroundColor: {
-                color: {
-                  rgbColor: {
-                    red: 0.2,
-                    green: 0.2,
-                    blue: 0.2,
-                  },
-                },
-              },
-            },
-            fields: "foregroundColor",
-          },
-        });
-        break;
-
-      default:
-        break;
+    if (line.startsWith("# ")) {
+      requests.push(generateHeadingRequest("HEADING_1", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("## ")) {
+      requests.push(generateHeadingRequest("HEADING_2", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("### ")) {
+      requests.push(generateHeadingRequest("HEADING_3", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("#### ")) {
+      requests.push(generateHeadingRequest("HEADING_4", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("##### ")) {
+      requests.push(generateHeadingRequest("HEADING_5", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("###### ")) {
+      requests.push(generateHeadingRequest("HEADING_6", currentIndex, endIndexOfContent));
+    } else if (line.startsWith("```")) {
+      requests.push(generateCodeBlockRequest(currentIndex, endIndexOfContent));
+    } else if (line.startsWith("> ")) {
+      requests.push(generateBlockquoteRequest(currentIndex, endIndexOfContent));
+    } else if (line.startsWith("---") || line.startsWith("***") || line.startsWith("___")) {
+      requests.push(generateHorizontalRuleRequest(currentIndex, endIndexOfContent));
+    }
+    else {
+      requests.push(generateNormalTextRequest(currentIndex, endIndexOfContent));
     }
 
     currentIndex = endIndexOfContent;
@@ -182,4 +50,122 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   });
 
   return documentId;
+}
+
+function generateHeadingRequest(headingType, startIndex, endIndex) {
+  return {
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        namedStyleType: headingType,
+      },
+      fields: "namedStyleType",
+    },
+  };
+}
+
+function generateCodeBlockRequest(startIndex, endIndex) {
+  let requests = [];
+
+  requests.push({
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        namedStyleType: "NORMAL_TEXT",
+      },
+      fields: "namedStyleType",
+    },
+  });
+
+  // Monospace font
+  requests.push({
+    updateTextStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      textStyle: {
+        weightedFontFamily: {
+          fontFamily: "Courier New",
+          weight: 400,
+        },
+      },
+      fields: "weightedFontFamily",
+    },
+  });
+
+  // Block quote
+  requests.push({
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        indentStart: {
+          magnitude: 36,
+          unit: "PT",
+        },
+      },
+      fields: "indentStart",
+    },
+  });
+
+  return requests;
+}
+
+function generateBlockquoteRequest(startIndex, endIndex) {
+  return {
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        indentStart: {
+          magnitude: 36,
+          unit: "PT",
+        },
+      },
+      fields: "indentStart",
+    },
+  };
+}
+
+function generateHorizontalRuleRequest(startIndex, endIndex) {
+  return {
+    insertInlineImage: {
+      location: {
+        index: startIndex,
+      },
+      uri: "https://freepngimg.com/thumb/web_design/24676-7-horizontal-line-transparent-background.png",
+      objectSize: {
+        width: {
+          magnitude: 500,
+          unit: "PT",
+        },
+      },
+    },
+  };
+}
+
+function generateNormalTextRequest(startIndex, endIndex) {
+  return {
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        namedStyleType: "NORMAL_TEXT",
+      },
+      fields: "namedStyleType",
+    },
+  };
 }
