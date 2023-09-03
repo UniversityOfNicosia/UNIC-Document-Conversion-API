@@ -5,11 +5,44 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const doc = await docs.documents.create({ requestBody: { title } });
   const documentId = doc.data.documentId;
 
+  let inCodeBlock = false;
+  let codeBlockContent = "";
+
   const lines = markdownString.split(/\n/);
 
   lines.forEach((line) => {
-    let textContent = line + "\n";
-    let endIndexOfContent = currentIndex + textContent.length;
+    let textContent, endIndexOfContent;
+
+    if (line.startsWith("```")) {
+      if (inCodeBlock) {
+        inCodeBlock = false;
+        textContent = codeBlockContent + "\n";
+        endIndexOfContent = currentIndex + textContent.length;
+
+        requests.push(generateCodeBlockRequest(currentIndex, endIndexOfContent, textContent));
+        codeBlockContent = "";
+      } else {
+        inCodeBlock = true;
+      }
+      return;
+    }
+
+    if (inCodeBlock) {
+      codeBlockContent += line + "\n";
+      return;
+    }
+
+    if (line.startsWith("#")) {
+      textContent = line.replace(/^#+\s*/, "") + "\n";
+    } else if (line.startsWith("---") || line.startsWith("***") || line.startsWith("___")) {
+      textContent = "\n";
+    } else if (line.startsWith("> ")) {
+      textContent = line.replace(/^>\s*/, "") + "\n";
+    } else {
+      textContent = line + "\n";
+    }
+
+    endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
       insertText: {
@@ -30,14 +63,11 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       requests.push(generateHeadingRequest("HEADING_5", currentIndex, endIndexOfContent));
     } else if (line.startsWith("###### ")) {
       requests.push(generateHeadingRequest("HEADING_6", currentIndex, endIndexOfContent));
-    } else if (line.startsWith("```")) {
-      requests.push(generateCodeBlockRequest(currentIndex, endIndexOfContent));
     } else if (line.startsWith("> ")) {
       requests.push(generateBlockquoteRequest(currentIndex, endIndexOfContent));
     } else if (line.startsWith("---") || line.startsWith("***") || line.startsWith("___")) {
-      requests.push(generateHorizontalRuleRequest(currentIndex, endIndexOfContent));
-    }
-    else {
+      requests.push(generateHorizontalRuleRequest(currentIndex));
+    } else {
       requests.push(generateNormalTextRequest(currentIndex, endIndexOfContent));
     }
 
@@ -67,8 +97,15 @@ function generateHeadingRequest(headingType, startIndex, endIndex) {
   };
 }
 
-function generateCodeBlockRequest(startIndex, endIndex) {
+function generateCodeBlockRequest(startIndex, endIndex, textContent) {
   let requests = [];
+
+  requests.push({
+    insertText: {
+      location: { index: startIndex },
+      text: textContent,
+    },
+  });
 
   requests.push({
     updateParagraphStyle: {
