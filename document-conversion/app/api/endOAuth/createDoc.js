@@ -55,7 +55,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = line + "\n";
     }
 
-    textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText) + "\n";
+    textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
     endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
