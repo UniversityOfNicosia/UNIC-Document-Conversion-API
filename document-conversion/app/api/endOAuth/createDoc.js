@@ -12,6 +12,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
 
   const lines = markdownString.split(/\n/);
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+  const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -21,14 +22,18 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         inCodeBlock = false;
         textContent = codeBlockContent + "\n";
         endIndexOfContent = currentIndex + textContent.length;
-
-        requests.push(generateCodeBlockRequest(currentIndex, endIndexOfContent, textContent));
+    
+        const codeBlockRequests = generateCodeBlockRequest(currentIndex, endIndexOfContent, textContent);
+        requests.splice(currentIndex, 0, ...codeBlockRequests);
+    
+        currentIndex = endIndexOfContent;
         codeBlockContent = "";
       } else {
         inCodeBlock = true;
       }
       return;
     }
+    
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
@@ -41,11 +46,16 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = "\n";
     } else if (line.startsWith("> ")) {
       textContent = line.replace(/^>\s*/, "") + "\n";
+    } else if (imageRegex.test(line)) {
+      const imageUrl = line.match(imageRegex)[0].replace(/!\[.*?\]\(/, "").replace(/\)/, "");
+      requests.push(generateImageRequest(currentIndex, imageUrl));
+      currentIndex += 1;
+      return;
     } else {
       textContent = line + "\n";
     }
 
-    textContent = line.replace(linkRegex, (match, linkText, linkUrl) => linkText) + "\n";
+    textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText) + "\n";
     endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
@@ -190,7 +200,7 @@ function generateBlockquoteRequest(startIndex, endIndex) {
   };
 }
 
-function generateHorizontalRuleRequest(startIndex, endIndex) {
+function generateHorizontalRuleRequest(startIndex) {
   return {
     insertInlineImage: {
       location: {
@@ -235,6 +245,23 @@ function generateHyperlinkRequest(startIndex, endIndex, url) {
         },
       },
       fields: "link",
+    },
+  };
+}
+
+function generateImageRequest(startIndex, imageUrl) {
+  return {
+    insertInlineImage: {
+      location: {
+        index: startIndex,
+      },
+      uri: imageUrl,
+      objectSize: {
+        width: {
+          magnitude: 500,
+          unit: "PT",
+        },
+      },
     },
   };
 }
