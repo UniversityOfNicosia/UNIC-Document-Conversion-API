@@ -1,3 +1,5 @@
+import { link } from "fs";
+
 export async function exportToGDoc(markdownString, title = "Document", docs) {
   let currentIndex = 1;
   let requests = [];
@@ -9,6 +11,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   let codeBlockContent = "";
 
   const lines = markdownString.split(/\n/);
+  const linkRegex = /\[(.*?)\]\((.*?)\)/g;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -42,6 +45,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = line + "\n";
     }
 
+    textContent = line.replace(linkRegex, (match, linkText, linkUrl) => linkText) + "\n";
     endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
@@ -50,6 +54,17 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         text: textContent,
       },
     });
+
+    let match;
+    let offset = 0;
+    while ((match = linkRegex.exec(line)) !== null) {
+      const [fullMatch, linkText, linkUrl] = match;
+      const linkStart = currentIndex + line.indexOf(linkText, offset) - 1;
+      const linkEnd = linkStart + linkText.length;
+
+      requests.push(generateHyperlinkRequest(linkStart, linkEnd, linkUrl));
+      offset = linkEnd;
+    }
 
     if (line.startsWith("# ")) {
       requests.push(generateHeadingRequest("HEADING_1", currentIndex, endIndexOfContent));
@@ -203,6 +218,23 @@ function generateNormalTextRequest(startIndex, endIndex) {
         namedStyleType: "NORMAL_TEXT",
       },
       fields: "namedStyleType",
+    },
+  };
+}
+
+function generateHyperlinkRequest(startIndex, endIndex, url) {
+  return {
+    updateTextStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      textStyle: {
+        link: {
+          url,
+        },
+      },
+      fields: "link",
     },
   };
 }
