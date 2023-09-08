@@ -1,5 +1,20 @@
-import { link } from "fs";
+/**
+ * This module exports a function that converts a markdown string to a Google Doc.
+ * It uses the Google Docs API to create a new document and insert the markdown content.
+ * The markdown is converted to plain text and formatted using the Google Docs API.
+ * Images and links are also supported.
+ *
+ * @module createDoc
+ */
 
+/**
+ * Converts a markdown string to a Google Doc.
+ *
+ * @param {string} markdownString - The markdown string to convert.
+ * @param {string} [title="Document"] - The title of the Google Doc.
+ * @param {object} docs - The Google Docs API client.
+ * @returns {string} The ID of the created Google Doc.
+ */
 export async function exportToGDoc(markdownString, title = "Document", docs) {
   let currentIndex = 1;
   let requests = [];
@@ -16,8 +31,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const boldRegex = /\*\*(.*?)\*\*|__(.*?)__/g;
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
   const codeRegex = /`(.*?)`/g;
-
-
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -61,8 +74,12 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = line + "\n";
     }
 
+    // Remove markdown formatting
     textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
-    textContent = textContent.replace(boldRegex, (match, boldText) => boldText); // This is line 65
+    textContent = textContent.replace(boldRegex, (match, bold1, bold2) => bold1 || bold2);
+    textContent = textContent.replace(italicRegex, (match, italic1, italic2) => italic1 || italic2);
+    textContent = textContent.replace(codeRegex, (match, code) => code);
+
     endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
@@ -71,34 +88,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         text: textContent,
       },
     });
-    console.log("insertText request added. Start:", currentIndex, "End:", endIndexOfContent);
-
-    // Handle [link](url)
-    let linkMatch;
-    let linkOffset = 0;
-    while ((linkMatch  = linkRegex.exec(line)) !== null) {
-      const [fullMatch, linkText, linkUrl] = linkMatch;
-      const linkStart = currentIndex + line.indexOf(linkText, linkOffset) - 1;
-      const linkEnd = linkStart + linkText.length;
-
-      requests.push(generateHyperlinkRequest(linkStart, linkEnd, linkUrl));
-      console.log("hyperlink request added. Start:", linkStart, "End:", linkEnd);
-      linkOffset = linkEnd;
-    }
-
-//     // Handle **strong**
-//     let boldMatch;
-//     let boldOffset = 0;
-//     while ((boldMatch = boldRegex.exec(line)) !== null) {
-//       const boldText = boldMatch[1] || boldMatch[2];
-//       if (!boldText) continue;
-//       const boldStart = currentIndex + line.indexOf(boldText, boldOffset);
-//       const boldEnd = boldStart + boldText.length;
-
-//       requests.push(generateBoldRequest(boldStart, boldEnd));
-//       console.log("bold request added. Start:", boldStart, "End:", boldEnd);
-//       boldOffset = boldEnd;
-// }
 
     // Handle headings
     if (line.startsWith("# ")) {
@@ -121,6 +110,8 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       requests.push(generateNormalTextRequest(currentIndex, endIndexOfContent));
     }
 
+    requests.push(...processInlineFormatting(line, currentIndex));
+
     currentIndex = endIndexOfContent;
   });
 
@@ -130,10 +121,60 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   });
 
 
-  console.log("Last index:", currentIndex);
   return documentId;
 }
 
+/**
+ * Processes inline formatting in a markdown string.
+ * Returns an array of requests to be sent to the Google Docs API.
+ * 
+ * @param {string} line - The line to process.
+ * @param {number} currentIndex - The current index in the document.
+ * @returns {object[]} An array of requests to be sent to the Google Docs API.
+ */
+function processInlineFormatting(line, currentIndex) {
+  const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+  const boldRegex = /\*\*(.*?)\*\*|__(.*?)__/g;
+  const italicRegex = /_(.*?)_|\*(.*?)\*/g;
+
+  const requests = [];
+
+  // Handling links
+  let linkOffset = 0;
+  let linkMatch;
+  while ((linkMatch = linkRegex.exec(line)) !== null) {
+    const [fullMatch, linkText, linkUrl] = linkMatch;
+    const linkStart = currentIndex + line.indexOf(linkText, linkOffset) - 1; // -1 for the [
+    const linkEnd = linkStart + linkText.length;
+
+    requests.push(generateHyperlinkRequest(linkStart, linkEnd, linkUrl));
+    linkOffset = linkEnd;
+  }
+
+  // Handling bold text
+  let boldOffset = 0;
+  let boldMatch;
+  while ((boldMatch = boldRegex.exec(line)) !== null) {
+    const boldText = boldMatch[1] || boldMatch[2];
+    if (!boldText) continue;
+    const boldStart = currentIndex + line.indexOf(boldText, boldOffset) - 2; // -2 for ** or __
+    const boldEnd = boldStart + boldText.length;
+
+    requests.push(generateBoldRequest(boldStart, boldEnd));
+    boldOffset = boldEnd;
+  }
+
+  return requests;
+}
+
+/**
+ * Generates a request to set the heading type of a paragraph.
+ * 
+ * @param {string} headingType - The heading type.
+ * @param {number} startIndex - The start index of the paragraph.
+ * @param {number} endIndex - The end index of the paragraph.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateHeadingRequest(headingType, startIndex, endIndex) {
   return {
     updateParagraphStyle: {
@@ -149,6 +190,14 @@ function generateHeadingRequest(headingType, startIndex, endIndex) {
   };
 }
 
+/**
+ * Generates requests to insert a code block.
+ * 
+ * @param {number} startIndex - The start index of the code block.
+ * @param {number} endIndex - The end index of the code block.
+ * @param {string} textContent - The text content of the code block.
+ * @returns {object[]} An array of requests to be sent to the Google Docs API.
+ */
 function generateCodeBlockRequest(startIndex, endIndex, textContent) {
   let requests = [];
 
@@ -209,6 +258,13 @@ function generateCodeBlockRequest(startIndex, endIndex, textContent) {
   return requests;
 }
 
+/**
+ * Generates a request to insert a block quote.
+ * 
+ * @param {number} startIndex - The start index of the block quote.
+ * @param {number} endIndex - The end index of the block quote.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */ 
 function generateBlockquoteRequest(startIndex, endIndex) {
   return {
     updateParagraphStyle: {
@@ -227,6 +283,12 @@ function generateBlockquoteRequest(startIndex, endIndex) {
   };
 }
 
+/**
+ * Generates a request to insert a horizontal rule.
+ * 
+ * @param {number} startIndex - The start index of the horizontal rule.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateHorizontalRuleRequest(startIndex) {
   return {
     insertInlineImage: {
@@ -244,6 +306,13 @@ function generateHorizontalRuleRequest(startIndex) {
   };
 }
 
+/**
+ * Generates a request to set the paragraph style to normal text.
+ * 
+ * @param {number} startIndex - The start index of the paragraph.
+ * @param {number} endIndex - The end index of the paragraph.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateNormalTextRequest(startIndex, endIndex) {
   return {
     updateParagraphStyle: {
@@ -259,8 +328,15 @@ function generateNormalTextRequest(startIndex, endIndex) {
   };
 }
 
+/**
+ * Generates a request to insert a hyperlink.
+ * 
+ * @param {number} startIndex - The start index of the hyperlink.
+ * @param {number} endIndex - The end index of the hyperlink.
+ * @param {string} url - The URL of the hyperlink.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateHyperlinkRequest(startIndex, endIndex, url) {
-  console.log("Generating hyperlink. Start:", startIndex, "End:", endIndex, "URL:", url);
   return {
     updateTextStyle: {
       range: {
@@ -277,6 +353,13 @@ function generateHyperlinkRequest(startIndex, endIndex, url) {
   };
 }
 
+/**
+ * Generates a request to insert an image.
+ * 
+ * @param {number} startIndex - The start index of the image.
+ * @param {string} imageUrl - The URL of the image.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateImageRequest(startIndex, imageUrl) {
   return {
     insertInlineImage: {
@@ -294,6 +377,13 @@ function generateImageRequest(startIndex, imageUrl) {
   };
 }
 
+/**
+ * Generates a request to set the bold property of a text range.
+ * 
+ * @param {number} startIndex - The start index of the text range.
+ * @param {number} endIndex - The end index of the text range.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
 function generateBoldRequest(startIndex, endIndex) {
   return {
     updateTextStyle: {
