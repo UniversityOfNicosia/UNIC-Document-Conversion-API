@@ -13,10 +13,16 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const lines = markdownString.split(/\n/);
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
   const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
+  const boldRegex = /\*\*(.*?)\*\*|__(.*?)__/g;
+  const italicRegex = /_(.*?)_|\*(.*?)\*/g;
+  const codeRegex = /`(.*?)`/g;
+
+
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
 
+    // Handle ```code blocks```
     if (line.startsWith("```")) {
       if (inCodeBlock) {
         inCodeBlock = false;
@@ -56,6 +62,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
     }
 
     textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
+    textContent = textContent.replace(boldRegex, (match, boldText) => boldText); // This is line 65
     endIndexOfContent = currentIndex + textContent.length;
 
     requests.push({
@@ -64,18 +71,36 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         text: textContent,
       },
     });
+    console.log("insertText request added. Start:", currentIndex, "End:", endIndexOfContent);
 
-    let match;
-    let offset = 0;
-    while ((match = linkRegex.exec(line)) !== null) {
-      const [fullMatch, linkText, linkUrl] = match;
-      const linkStart = currentIndex + line.indexOf(linkText, offset) - 1;
+    // Handle [link](url)
+    let linkMatch;
+    let linkOffset = 0;
+    while ((linkMatch  = linkRegex.exec(line)) !== null) {
+      const [fullMatch, linkText, linkUrl] = linkMatch;
+      const linkStart = currentIndex + line.indexOf(linkText, linkOffset) - 1;
       const linkEnd = linkStart + linkText.length;
 
       requests.push(generateHyperlinkRequest(linkStart, linkEnd, linkUrl));
-      offset = linkEnd;
+      console.log("hyperlink request added. Start:", linkStart, "End:", linkEnd);
+      linkOffset = linkEnd;
     }
 
+//     // Handle **strong**
+//     let boldMatch;
+//     let boldOffset = 0;
+//     while ((boldMatch = boldRegex.exec(line)) !== null) {
+//       const boldText = boldMatch[1] || boldMatch[2];
+//       if (!boldText) continue;
+//       const boldStart = currentIndex + line.indexOf(boldText, boldOffset);
+//       const boldEnd = boldStart + boldText.length;
+
+//       requests.push(generateBoldRequest(boldStart, boldEnd));
+//       console.log("bold request added. Start:", boldStart, "End:", boldEnd);
+//       boldOffset = boldEnd;
+// }
+
+    // Handle headings
     if (line.startsWith("# ")) {
       requests.push(generateHeadingRequest("HEADING_1", currentIndex, endIndexOfContent));
     } else if (line.startsWith("## ")) {
@@ -104,6 +129,8 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
     requestBody: { requests },
   });
 
+
+  console.log("Last index:", currentIndex);
   return documentId;
 }
 
@@ -233,6 +260,7 @@ function generateNormalTextRequest(startIndex, endIndex) {
 }
 
 function generateHyperlinkRequest(startIndex, endIndex, url) {
+  console.log("Generating hyperlink. Start:", startIndex, "End:", endIndex, "URL:", url);
   return {
     updateTextStyle: {
       range: {
@@ -262,6 +290,21 @@ function generateImageRequest(startIndex, imageUrl) {
           unit: "PT",
         },
       },
+    },
+  };
+}
+
+function generateBoldRequest(startIndex, endIndex) {
+  return {
+    updateTextStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      textStyle: {
+        bold: true,
+      },
+      fields: "bold",
     },
   };
 }
