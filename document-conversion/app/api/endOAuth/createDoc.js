@@ -273,12 +273,12 @@ function generateCodeBlockRequest(startIndex, endIndex, textContent) {
         endIndex,
       },
       paragraphStyle: {
-        indentStart: {
+        indentFirstLine: {
           magnitude: 36,
           unit: "PT",
         },
       },
-      fields: "indentStart",
+      fields: "indentFirstLine",
     },
   });
 
@@ -286,28 +286,51 @@ function generateCodeBlockRequest(startIndex, endIndex, textContent) {
 }
 
 /**
- * Generates a request to insert a block quote.
+ * Generates a request to format a block quote.
  * 
  * @param {number} startIndex - The start index of the block quote.
  * @param {number} endIndex - The end index of the block quote.
- * @returns {object} A request to be sent to the Google Docs API.
+ * @returns {object[]} An array of requests to be sent to the Google Docs API.
  */ 
 function generateBlockquoteRequest(startIndex, endIndex) {
-  return {
-    updateParagraphStyle: {
-      range: {
-        startIndex,
-        endIndex,
-      },
-      paragraphStyle: {
-        indentStart: {
-          magnitude: 36,
-          unit: "PT",
+  return [
+    {
+      updateParagraphStyle: {
+        range: {
+          startIndex,
+          endIndex,
         },
+        paragraphStyle: {
+          indentFirstLine: {
+            magnitude: 36,
+            unit: "PT",
+          },
+        },
+        fields: "indentFirstLine",
       },
-      fields: "indentStart",
     },
-  };
+    {
+      updateTextStyle: {
+        range: {
+          startIndex,
+          endIndex,
+        },
+        textStyle: {
+          italic: true,
+          foregroundColor: {
+            color: {
+              rgbColor: {
+                red: 0.5,
+                green: 0.5,
+                blue: 0.5,
+              },
+            },
+          },
+        },
+        fields: "italic,foregroundColor",
+      },
+    },
+  ];
 }
 
 /**
