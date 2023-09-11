@@ -31,6 +31,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const boldRegex = /\*\*(.*?)\*\*|__(.*?)__/g;
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
   const codeRegex = /`(.*?)`/g;
+  const bulletRegex = /^\s*[-*]\s/;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -53,6 +54,17 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       return;
     }
     
+    if (line.match(bulletRegex)) {
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      textContent = line.replace(bulletRegex, "") + "\n";
+
+      // Log the indentation level and the textContent
+      console.log(`Indentation Level: ${indentationLevel}`);
+      console.log(`Text Content: ${textContent}`);
+
+      // TODO: Add your code here to generate the indentation request
+    }
+
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
