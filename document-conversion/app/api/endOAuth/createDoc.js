@@ -164,6 +164,19 @@ function processInlineFormatting(line, currentIndex) {
     boldOffset = boldEnd;
   }
 
+  // Handling italic text
+  let italicOffset = 0;
+  let italicMatch;
+  while ((italicMatch = italicRegex.exec(line)) !== null) {
+    const italicText = italicMatch[1] || italicMatch[2];
+    if (!italicText) continue;
+    const italicStart = currentIndex + line.indexOf(italicText, italicOffset) - 1; // -1 for _ or *
+    const italicEnd = italicStart + italicText.length;
+
+    requests.push(generateItalicRequest(italicStart, italicEnd));
+    italicOffset = italicEnd;
+  }
+
   return requests;
 }
 
@@ -395,6 +408,28 @@ function generateBoldRequest(startIndex, endIndex) {
         bold: true,
       },
       fields: "bold",
+    },
+  };
+}
+
+/** 
+ * Generates a request to set the italic property of a text range.
+ * 
+ * @param {number} startIndex - The start index of the text range.
+ * @param {number} endIndex - The end index of the text range.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
+function generateItalicRequest(startIndex, endIndex) {
+  return {
+    updateTextStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      textStyle: {
+        italic: true,
+      },
+      fields: "italic",
     },
   };
 }
