@@ -136,6 +136,7 @@ function processInlineFormatting(line, currentIndex) {
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
   const boldRegex = /\*\*(.*?)\*\*|__(.*?)__/g;
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
+  const codeRegex = /`(.*?)`/g;
 
   const requests = [];
 
@@ -175,6 +176,19 @@ function processInlineFormatting(line, currentIndex) {
 
     requests.push(generateItalicRequest(italicStart, italicEnd));
     italicOffset = italicEnd;
+  }
+
+  // Handling code
+  let codeOffset = 0;
+  let codeMatch;
+  while ((codeMatch = codeRegex.exec(line)) !== null) {
+    const codeText = codeMatch[1];
+    if (!codeText) continue;
+    const codeStart = currentIndex + line.indexOf(codeText, codeOffset) - 1; // -1 for `
+    const codeEnd = codeStart + codeText.length;
+
+    requests.push(generateCodeRequest(codeStart, codeEnd));
+    codeOffset = codeEnd;
   }
 
   return requests;
@@ -430,6 +444,31 @@ function generateItalicRequest(startIndex, endIndex) {
         italic: true,
       },
       fields: "italic",
+    },
+  };
+}
+
+/**
+ * Generates a request to set the code property of a text range.
+ * 
+ * @param {number} startIndex - The start index of the text range.
+ * @param {number} endIndex - The end index of the text range.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
+function generateCodeRequest(startIndex, endIndex) {
+  return {
+    updateTextStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      textStyle: {
+        weightedFontFamily: {
+          fontFamily: "Courier New",
+          weight: 400,
+        },
+      },
+      fields: "weightedFontFamily",
     },
   };
 }
