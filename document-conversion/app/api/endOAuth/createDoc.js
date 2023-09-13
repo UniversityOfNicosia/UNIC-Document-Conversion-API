@@ -53,18 +53,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       }
       return;
     }
-    
-    if (line.match(bulletRegex)) {
-      const indentationLevel = line.match(/^\s*/)[0].length / 4;
-      textContent = line.replace(bulletRegex, "") + "\n";
-
-      // Log the indentation level and the textContent
-      console.log(`Indentation Level: ${indentationLevel}`);
-      console.log(`Text Content: ${textContent}`);
-
-      // TODO: Add your code here to generate the indentation request
-    }
-
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
@@ -118,6 +106,9 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       requests.push(generateBlockquoteRequest(currentIndex, endIndexOfContent));
     } else if (line.startsWith("---") || line.startsWith("***") || line.startsWith("___")) {
       requests.push(generateHorizontalRuleRequest(currentIndex));
+    } else if (line.match(bulletRegex)) {
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      requests.push(...generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel));
     } else {
       requests.push(generateNormalTextRequest(currentIndex, endIndexOfContent));
     }
@@ -506,4 +497,47 @@ function generateCodeRequest(startIndex, endIndex) {
       fields: "weightedFontFamily",
     },
   };
+}
+
+/**
+ * Generates a request to set indentation for bullet points.
+ * 
+ * @param {number} startIndex - The start index of the bullet point.
+ * @param {number} endIndex - The end index of the bullet point.
+ * @param {number} indentationLevel - The level of indentation.
+ * @returns {object} A request to be sent to the Google Docs API.
+ */
+function generateBulletIndentationRequest(startIndex, endIndex, indentationLevel) {
+  const defaultTabStop = 36;
+  const magnitude = indentationLevel * defaultTabStop;
+  
+  // Bullet points
+  const bulletRequest = {
+    createParagraphBullets: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      bulletPreset: 'BULLET_DISC_CIRCLE_SQUARE',
+    }
+  };
+
+  // Indentation
+  const indentationRequest = {
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        indentFirstLine: {
+          magnitude: magnitude,
+          unit: "PT",
+        },
+      },
+      fields: "indentFirstLine",
+    },
+  };
+
+  return [bulletRequest, indentationRequest];
 }
