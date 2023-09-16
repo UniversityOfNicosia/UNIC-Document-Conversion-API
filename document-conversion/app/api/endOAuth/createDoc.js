@@ -65,6 +65,13 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = "\n";
     } else if (line.startsWith("> ")) {
       textContent = line.replace(/^>\s*/, "") + "\n";
+    } else if (line.match(bulletRegex)) {
+      textContent = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => {
+        // console.log("Match:", match);
+        console.log("Bullet:", bullet, "|", bullet.length);
+        console.log("Content:", content);
+        return match;
+      }) + "\n";
     } else if (imageRegex.test(line)) {
       const imageUrl = line.match(imageRegex)[0].replace(/!\[.*?\]\(/, "").replace(/\)/, "");
       requests.push(generateImageRequest(currentIndex, imageUrl));
