@@ -538,8 +538,8 @@ function generateCodeRequest(startIndex, endIndex) {
  * @returns {object} A request to be sent to the Google Docs API.
  */
 function generateBulletIndentationRequest(startIndex, endIndex, indentationLevel) {
-  const defaultTabStop = 36;
-  const magnitude = indentationLevel * defaultTabStop;
+  const magnitude = indentationLevel * 36;
+  const bulletPreset = "BULLET_DISC_CIRCLE_SQUARE";
   
   // Bullet points
   const bulletRequest = {
@@ -548,7 +548,7 @@ function generateBulletIndentationRequest(startIndex, endIndex, indentationLevel
         startIndex,
         endIndex,
       },
-      bulletPreset: 'BULLET_DISC_CIRCLE_SQUARE',
+      bulletPreset: bulletPreset,
     }
   };
 
