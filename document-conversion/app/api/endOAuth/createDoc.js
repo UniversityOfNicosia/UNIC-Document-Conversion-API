@@ -76,11 +76,12 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       });
 
       const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      line = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => content);
       const bulletRequests = generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel);
-      // const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
+      const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
 
       requests.splice(currentIndex, 0, ...bulletRequests);
-      // requests.splice(currentIndex, 0, ...inlineFormattingRequests);
+      requests.push(...inlineFormattingRequests);
 
       currentIndex = endIndexOfContent;
       return;
