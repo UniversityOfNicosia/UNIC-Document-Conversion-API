@@ -60,6 +60,12 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         console.log("Content:", content);
         return content;
       }) + "\n";
+
+      textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
+      textContent = textContent.replace(boldRegex, (match, bold1, bold2) => bold1 || bold2);
+      textContent = textContent.replace(italicRegex, (match, italic1, italic2) => italic1 || italic2);
+      textContent = textContent.replace(codeRegex, (match, code) => code);
+
       endIndexOfContent = currentIndex + textContent.length;
       
       requests.push({
@@ -68,12 +74,13 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
           text: textContent,
         },
       });
-  
 
       const indentationLevel = line.match(/^\s*/)[0].length / 4;
       const bulletRequests = generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel);
+      // const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
 
       requests.splice(currentIndex, 0, ...bulletRequests);
+      // requests.splice(currentIndex, 0, ...inlineFormattingRequests);
 
       currentIndex = endIndexOfContent;
       return;
