@@ -54,6 +54,31 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       return;
     }
 
+    if (line.match(bulletRegex)) {
+      textContent = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => {
+        console.log("Bullet:", bullet, "|", bullet.length);
+        console.log("Content:", content);
+        return content;
+      }) + "\n";
+      endIndexOfContent = currentIndex + textContent.length;
+      
+      requests.push({
+        insertText: {
+          location: { index: currentIndex },
+          text: textContent,
+        },
+      });
+  
+
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      const bulletRequests = generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel);
+
+      requests.splice(currentIndex, 0, ...bulletRequests);
+
+      currentIndex = endIndexOfContent;
+      return;
+    } 
+
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
       return;
@@ -65,13 +90,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       textContent = "\n";
     } else if (line.startsWith("> ")) {
       textContent = line.replace(/^>\s*/, "") + "\n";
-    } else if (line.match(bulletRegex)) {
-      textContent = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => {
-        // console.log("Match:", match);
-        console.log("Bullet:", bullet, "|", bullet.length);
-        console.log("Content:", content);
-        return match;
-      }) + "\n";
     } else if (imageRegex.test(line)) {
       const imageUrl = line.match(imageRegex)[0].replace(/!\[.*?\]\(/, "").replace(/\)/, "");
       requests.push(generateImageRequest(currentIndex, imageUrl));
@@ -113,9 +131,6 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       requests.push(generateBlockquoteRequest(currentIndex, endIndexOfContent));
     } else if (line.startsWith("---") || line.startsWith("***") || line.startsWith("___")) {
       requests.push(generateHorizontalRuleRequest(currentIndex));
-    } else if (line.match(bulletRegex)) {
-      const indentationLevel = line.match(/^\s*/)[0].length / 4;
-      requests.push(...generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel));
     } else {
       requests.push(generateNormalTextRequest(currentIndex, endIndexOfContent));
     }
