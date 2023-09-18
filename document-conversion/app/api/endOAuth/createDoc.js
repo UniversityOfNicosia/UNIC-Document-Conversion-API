@@ -55,18 +55,16 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
     }
 
     if (line.match(bulletRegex)) {
-      textContent = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => {
-        console.log("Bullet:", bullet, "|", bullet.length);
-        console.log("Content:", content);
-        return content;
-      }) + "\n";
-
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      const tabs = '\t'.repeat(indentationLevel);
+      textContent = tabs + line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => content) + "\n";
+    
       textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
       textContent = textContent.replace(boldRegex, (match, bold1, bold2) => bold1 || bold2);
       textContent = textContent.replace(italicRegex, (match, italic1, italic2) => italic1 || italic2);
       textContent = textContent.replace(codeRegex, (match, code) => code);
 
-      endIndexOfContent = currentIndex + textContent.length;
+      endIndexOfContent = currentIndex + textContent.length - tabs.length;
       
       requests.push({
         insertText: {
@@ -74,10 +72,8 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
           text: textContent,
         },
       });
-
-      const indentationLevel = line.match(/^\s*/)[0].length / 4;
       line = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => content);
-      const bulletRequests = generateBulletIndentationRequest(currentIndex, endIndexOfContent, indentationLevel);
+      const bulletRequests = generateBulletRequest(currentIndex, endIndexOfContent, indentationLevel);
       const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
 
       requests.splice(currentIndex, 0, ...bulletRequests);
@@ -537,9 +533,9 @@ function generateCodeRequest(startIndex, endIndex) {
  * @param {number} indentationLevel - The level of indentation.
  * @returns {object} A request to be sent to the Google Docs API.
  */
-function generateBulletIndentationRequest(startIndex, endIndex, indentationLevel) {
-  const magnitude = indentationLevel * 36;
-  const bulletPreset = "BULLET_DISC_CIRCLE_SQUARE";
+function generateBulletRequest(startIndex, endIndex, indentationLevel) {
+  const magnitude = indentationLevel * 37;
+  const bulletPreset = "BULLET_DISC_CIRCLE_SQUARE"; // `BULLET_DISC_CIRCLE_SQUARE`	A bulleted list with a DISC, CIRCLE and SQUARE bullet glyph for the first 3 list nesting levels. From google docs
   
   // Bullet points
   const bulletRequest = {
