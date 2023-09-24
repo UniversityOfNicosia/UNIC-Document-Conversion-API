@@ -32,6 +32,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
   const codeRegex = /`(.*?)`/g;
   const bulletRegex = /^\s*[-*]\s/;
+  const numeralRegex = /^\s*\d+\.\s/;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -73,7 +74,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
         },
       });
       line = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => content);
-      const bulletRequests = generateBulletRequest(currentIndex, endIndexOfContent, indentationLevel);
+      const bulletRequests = generateBulletListRequest(currentIndex, endIndexOfContent, indentationLevel);
       const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
 
       requests.splice(currentIndex, 0, ...bulletRequests);
@@ -81,7 +82,37 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
 
       currentIndex = endIndexOfContent;
       return;
-    } 
+    }
+
+    if (line.match(numeralRegex)) {
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      const tabs = '\t'.repeat(indentationLevel);
+      textContent = tabs + line.replace(/^(\s*\d+\.\s)(.*)/, (match, numeral, content) => content) + "\n";
+      
+      textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
+      textContent = textContent.replace(boldRegex, (match, bold1, bold2) => bold1 || bold2);
+      textContent = textContent.replace(italicRegex, (match, italic1, italic2) => italic1 || italic2);
+      textContent = textContent.replace(codeRegex, (match, code) => code);
+
+      endIndexOfContent = currentIndex + textContent.length - tabs.length;
+
+      requests.push({
+        insertText: {
+          location: { index: currentIndex },
+          text: textContent,
+        },
+      });
+      line = line.replace(/^(\s*\d+\.\s)(.*)/, (match, numeral, content) => content);
+      const numeralRequests = generateNumeralListRequest(currentIndex, endIndexOfContent, indentationLevel);
+      const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
+    
+      requests.splice(currentIndex, 0, ...numeralRequests);
+      requests.push(...inlineFormattingRequests);
+    
+      currentIndex = endIndexOfContent;
+      return;
+    }
+    
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
@@ -533,7 +564,7 @@ function generateCodeRequest(startIndex, endIndex) {
  * @param {number} indentationLevel - The level of indentation.
  * @returns {object} A request to be sent to the Google Docs API.
  */
-function generateBulletRequest(startIndex, endIndex, indentationLevel) {
+function generateBulletListRequest(startIndex, endIndex, indentationLevel) {
   const magnitude = indentationLevel * 37;
   const bulletPreset = "BULLET_DISC_CIRCLE_SQUARE"; // `BULLET_DISC_CIRCLE_SQUARE`	A bulleted list with a DISC, CIRCLE and SQUARE bullet glyph for the first 3 list nesting levels. From google docs
   
@@ -566,4 +597,39 @@ function generateBulletRequest(startIndex, endIndex, indentationLevel) {
   };
 
   return [bulletRequest, indentationRequest];
+}
+
+function generateNumeralListRequest(startIndex, endIndex, indentationLevel) {
+  const magnitude = indentationLevel * 37;
+  const numeralPreset = "NUMBERED_DECIMAL_ALPHA_ROMAN"; // `NUMBERED_DIGIT_ALPHA_ROMAN`	A numbered list with arabic digits, uppercase roman numerals, and uppercase letters for the first 3 list nesting levels. From google docs
+  
+  // Bullet points
+  const numeralRequest = {
+    createParagraphBullets: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      bulletPreset: numeralPreset,
+    }
+  };
+
+  // Indentation
+  const indentationRequest = {
+    updateParagraphStyle: {
+      range: {
+        startIndex,
+        endIndex,
+      },
+      paragraphStyle: {
+        indentFirstLine: {
+          magnitude: magnitude,
+          unit: "PT",
+        },
+      },
+      fields: "indentFirstLine",
+    },
+  };
+
+  return [numeralRequest, indentationRequest];
 }
