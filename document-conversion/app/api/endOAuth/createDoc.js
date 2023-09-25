@@ -32,6 +32,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
   const codeRegex = /`(.*?)`/g;
   const bulletRegex = /^\s*[-*]\s/;
+  const numeralRegex = /^\s*\d+\.\s/;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -82,6 +83,11 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       currentIndex = endIndexOfContent;
       return;
     } 
+
+    if (line.match(numeralRegex)) {
+      // TODO: Do the same thing as in bullet regex, convert 1. 2. 3. to bullet points
+    }
+
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
