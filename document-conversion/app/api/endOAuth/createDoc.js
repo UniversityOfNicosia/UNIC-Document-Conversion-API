@@ -32,6 +32,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
   const italicRegex = /_(.*?)_|\*(.*?)\*/g;
   const codeRegex = /`(.*?)`/g;
   const bulletRegex = /^\s*[-*]\s/;
+  const numeralRegex = /^\s*\d+\.\s/;
 
   lines.forEach((line) => {
     let textContent, endIndexOfContent;
@@ -54,6 +55,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       return;
     }
 
+    // Handle bullet lists
     if (line.match(bulletRegex)) {
       const indentationLevel = line.match(/^\s*/)[0].length / 4;
       const tabs = '\t'.repeat(indentationLevel);
@@ -72,6 +74,7 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
           text: textContent,
         },
       });
+
       line = line.replace(/^(\s*[-*]\s)(.*)/, (match, bullet, content) => content);
       const bulletRequests = generateBulletRequest(currentIndex, endIndexOfContent, indentationLevel);
       const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
@@ -82,6 +85,38 @@ export async function exportToGDoc(markdownString, title = "Document", docs) {
       currentIndex = endIndexOfContent;
       return;
     } 
+
+    // Handle numberal lists as bullet lists
+    if (line.match(numeralRegex)) {
+      const indentationLevel = line.match(/^\s*/)[0].length / 4;
+      const tabs = '\t'.repeat(indentationLevel);
+      textContent = tabs + line.replace(/^(\s*\d+\.\s)(.*)/, (match, numeral, content) => content) + "\n";
+      
+      textContent = textContent.replace(linkRegex, (match, linkText, linkUrl) => linkText);
+      textContent = textContent.replace(boldRegex, (match, bold1, bold2) => bold1 || bold2);
+      textContent = textContent.replace(italicRegex, (match, italic1, italic2) => italic1 || italic2);
+      textContent = textContent.replace(codeRegex, (match, code) => code);
+    
+      endIndexOfContent = currentIndex + textContent.length - tabs.length;
+      
+      requests.push({
+        insertText: {
+          location: { index: currentIndex },
+          text: textContent,
+        },
+      });
+
+      line = line.replace(/^(\s*\d+\.\s)(.*)/, (match, numeral, content) => content);
+      const bulletRequests = generateBulletRequest(currentIndex, endIndexOfContent, indentationLevel);
+      const inlineFormattingRequests = processInlineFormatting(line, currentIndex);
+    
+      requests.splice(currentIndex, 0, ...bulletRequests);
+      requests.push(...inlineFormattingRequests);
+    
+      currentIndex = endIndexOfContent;
+      return;
+    }    
+
 
     if (inCodeBlock) {
       codeBlockContent += line + "\n";
