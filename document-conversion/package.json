@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "encoding": "^0.1.13",
     "eslint": "8.46.0",
     "eslint-config-next": "^13.4.16",
     "googleapis": "^123.0.0",
