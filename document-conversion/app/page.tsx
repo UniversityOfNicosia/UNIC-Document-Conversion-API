@@ -4,8 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import gfm from "remark-gfm";
-import { exportToDocx } from "../../exportToDocx";
-import { exportToPptx } from "../../exportToPptx";
+import { exportToDocx } from "../exportToDocx";
+import { exportToPptx } from "../exportToPptx";
 
 export default function Home() {
   const [markdown, setMarkdown] = useState('# markdown preview');
