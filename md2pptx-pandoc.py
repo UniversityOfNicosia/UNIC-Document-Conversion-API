@@ -15,13 +15,3 @@ def md2pptx(md):
     output_path = os.path.join(OUTPUT_DIR, filename)
     pypandoc.convert_text(md, 'pptx', format='md', outputfile=output_path)
     return filename
-
-
-md = """
-# This is a heading
-## This is a subheading
-### This is a subsubheading
-"""
-
-filename = md2pptx(md)
-print(filename)
