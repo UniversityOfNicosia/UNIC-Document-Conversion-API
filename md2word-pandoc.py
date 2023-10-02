@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 import pypandoc
 import os
+import datetime
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ def md2word(md):
     filename = f'markdown-{date}.docx'
     output_path = os.path.join(OUTPUT_DIR, filename)
     pypandoc.convert_text(md, 'docx', format='md', outputfile=output_path)
-    return unique_filename
+    return filename
 
 
 @app.route('/md2word', methods=['POST'])
