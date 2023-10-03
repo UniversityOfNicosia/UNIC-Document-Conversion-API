@@ -15,11 +15,3 @@ def md2html(md):
     output_path = os.path.join(OUTPUT_DIR, filename)
     pypandoc.convert_text(md, 'html', format='md', outputfile=output_path)
     return filename
-
-example_md = """
-# This is a heading
-- This is a bullet point
-- This is another bullet point
-"""
-
-print(md2html(example_md))
