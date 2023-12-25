@@ -4,10 +4,12 @@ updates:
     directory: "/document-conversion"
     schedule:
       interval: "weekly"
+      day: "saturday"
 
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "saturday"
 
 # Interval can be 'live', 'daily', 'weekly', or 'monthly'
