@@ -33,7 +33,7 @@
     "@types/markdown-it": "^13.0.0",
     "@types/node": "^20.6.2",
     "@types/react": "^18.2.21",
-    "@types/react-syntax-highlighter": "^15.5.7",
+    "@types/react-syntax-highlighter": "^15.5.11",
     "markdown-it": "^13.0.1",
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2"
