@@ -1,0 +1,13 @@
+version: 2
+updates:  
+  - package-ecosystem: "npm"
+    directory: "/document-conversion"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+# Interval can be 'live', 'daily', 'weekly', or 'monthly'
