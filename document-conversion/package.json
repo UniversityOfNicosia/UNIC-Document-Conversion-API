@@ -14,7 +14,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.56.0",
     "eslint-config-next": "^14.0.4",
-    "googleapis": "^123.0.0",
+    "googleapis": "^130.0.0",
     "highlight.js": "^11.9.0",
     "jsdom": "^23.1.0",
     "markdown-it": "^14.0.0",
