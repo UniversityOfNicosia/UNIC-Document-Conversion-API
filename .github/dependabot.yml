@@ -5,11 +5,15 @@ updates:
     schedule:
       interval: "weekly"
       day: "saturday"
+    reviewers:
+      - "HlexNC"
 
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "saturday"
+    reviewers:
+      - "HlexNC"
 
 # Interval can be 'live', 'daily', 'weekly', or 'monthly'
