@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/react-dom": "18.2.19",
+    "@types/react-dom": "18.2.21",
     "autoprefixer": "10.4.18",
     "encoding": "^0.1.13",
     "eslint": "8.57.0",
