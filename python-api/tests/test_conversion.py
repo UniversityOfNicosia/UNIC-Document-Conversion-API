@@ -2,8 +2,8 @@
 This module contains tests for converting Markdown to DOCX and PPTX formats.
 """
 from app.conversion_logic import md2pptx, md2word
-from fastapi.testclient import TestClient
 from app.main import app
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
@@ -46,7 +46,6 @@ def test_markdown_to_docx():
     Calls the md2word function with a sample Markdown content.
     Asserts that the function returns a valid filename.
     """
-    from app.conversion_logic import md2word
     filename = md2word("# Hello, World!")
     assert filename.endswith(".docx")
 
@@ -57,6 +56,5 @@ def test_markdown_to_pptx():
     Calls the md2pptx function with a sample Markdown content.
     Asserts that the function returns a valid filename.
     """
-    from app.conversion_logic import md2pptx
     filename = md2pptx("# Hello, World!")
     assert filename.endswith(".pptx")
