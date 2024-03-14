@@ -180,3 +180,5 @@ dist
 .idea/
 __pycache__/
 
+# Ingone generaed files
+converted_files/
