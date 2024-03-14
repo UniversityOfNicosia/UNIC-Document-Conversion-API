@@ -3,8 +3,8 @@ import codecs
 import pypandoc
 from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel
 from pathlib import Path
+from pydantic import BaseModel
 
 app = FastAPI()
 
