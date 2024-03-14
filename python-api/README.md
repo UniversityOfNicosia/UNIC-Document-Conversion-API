@@ -38,4 +38,33 @@ After setting up and activating the virtual environment, install the necessary d
 
 ```shell
 pip install -r requirements.txt
-````
+```
+
+## Installing Pandoc
+
+`pypandoc` requires Pandoc to be installed on your system as it acts as a wrapper around the Pandoc document converter. Follow these steps to install Pandoc:
+
+### For Linux and macOS:
+
+1. Open a terminal and execute the following command:
+
+    ```shell
+    sudo apt-get install pandoc
+    ```
+
+    This command is for Debian-based Linux distributions. If you are using a different Linux distribution or macOS with Homebrew, you might need to adjust the command accordingly, such as using `brew install pandoc` for macOS.
+
+### For Windows:
+
+1. Download the latest Pandoc installer from the [Pandoc releases page](https://github.com/jgm/pandoc/releases).
+2. Run the installer and follow the instructions to complete the installation.
+
+### Verifying the Installation:
+
+After installation, you can verify that Pandoc is correctly installed by running:
+
+```shell
+pandoc --version
+```
+
+This command should display the version of Pandoc installed on your system.
