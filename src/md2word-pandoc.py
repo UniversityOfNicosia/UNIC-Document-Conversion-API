@@ -1,8 +1,8 @@
 import datetime
 import codecs
 import pypandoc
-from fastapi import Depends, FastAPI, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import Depends, FastAPI, Form, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pathlib import Path
 
@@ -27,22 +27,14 @@ def md2word(md: str) -> str:
     return filename
 
 
-@app.post("/md2word")
-def convert_md2word(request: MarkdownRequest):
+@app.post("/markdown_to_docx/")
+async def markdown_to_docx(request: MarkdownRequest):
     request.md = codecs.decode(request.md, 'unicode_escape')
-    print(f"Received markdown content: {request.md}")
     try:
         filename = md2word(request.md)
-        return {"message": "Conversion successful!", "filename": filename, "result": request.md}
+        return FileResponse(Path(OUTPUT_DIR) / filename, media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document', filename=filename)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-
-@app.get("/download/{filename}")
-def download_file(filename: str):
-    path = Path(OUTPUT_DIR) / filename
-    headers = {"Content-Disposition": f"attachment; filename={filename}"}
-    return FileResponse(path, headers=headers)
 
 
 if __name__ == '__main__':
