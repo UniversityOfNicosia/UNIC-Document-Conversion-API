@@ -28,19 +28,11 @@ def md2pptx(md: str) -> str:
 @app.post("/md2pptx")
 def convert_md2pptx(request: MarkdownRequest):
     request.md = codecs.decode(request.md, 'unicode_escape')
-    print(f"Received markdown content: {request.md}")
     try:
         filename = md2pptx(request.md)
-        return {"message": "Conversion successful!", "filename": filename, "result": request.md}
+        return FileResponse(Path(OUTPUT_DIR) / filename, media_type='application/vnd.openxmlformats-officedocument.presentationml.presentation', filename=filename)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-
-@app.get("/download/{filename}")
-def download_file(filename: str):
-    path = Path(OUTPUT_DIR) / filename
-    headers = {"Content-Disposition": f"attachment; filename={filename}"}
-    return FileResponse(path, headers=headers)
 
 
 if __name__ == '__main__':
