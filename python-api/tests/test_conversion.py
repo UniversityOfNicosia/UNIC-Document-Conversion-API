@@ -1,6 +1,7 @@
 """
 This module contains tests for converting Markdown to DOCX and PPTX formats.
 """
+from app.conversion_logic import md2pptx, md2word
 from fastapi.testclient import TestClient
 from app.main import app
 
