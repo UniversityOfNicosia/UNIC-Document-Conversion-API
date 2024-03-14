@@ -20,7 +20,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from conversion_logic import md2word, md2pptx
+from conversion_logic import md2pptx, md2word
 
 
 app = FastAPI()
