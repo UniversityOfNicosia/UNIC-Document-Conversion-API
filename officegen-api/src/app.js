@@ -1,15 +1,12 @@
 const express = require('express');
-const documentController = require('./controllers/documentController');
+const documentRouter = require('./controllers/documentController');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-
-app.post('/convert', documentController.convertDocument);
+app.use('/api', documentRouter);
 
 app.listen(port, () => {
-  console.log(`Officegen API listening at http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
-
-module.exports = app;
