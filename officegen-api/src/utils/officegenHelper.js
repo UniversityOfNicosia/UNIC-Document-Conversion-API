@@ -1,19 +1,38 @@
 const officegen = require('officegen');
+const fs = require('fs');
+const path = require('path');
 
-exports.generateDocument = (type, content) => {
+// Function to create a DOCX file with basic text input
+exports.createDocxWithText = async (text, outputPath = 'output.docx') => {
   return new Promise((resolve, reject) => {
-    let doc = officegen(type);
-    doc.on('finalize', (writtenBytes) => {
-      resolve(`Document created successfully: ${writtenBytes} bytes written.`);
+    const docx = officegen({
+      type: 'docx',
+      orientation: 'portrait',
     });
-    doc.on('error', (err) => {
+
+    docx.on('error', (err) => {
+      console.error('officegen error:', err);
       reject(err);
     });
 
-    // Add content to the document based on its type
-    // For example, if type is 'docx', add paragraphs; if 'pptx', add slides
+    // Add a paragraph with the provided text
+    const pObj = docx.createP();
+    pObj.addText(text);
 
-    // Finalize the document to trigger 'finalize' event
-    doc.generate();
+    // Define the output stream
+    const out = fs.createWriteStream(path.join(__dirname, '..', '..', 'examples', outputPath));
+
+    out.on('error', (err) => {
+      console.error('File stream error:', err);
+      reject(err);
+    });
+
+    out.on('close', () => {
+      console.log(`${outputPath} has been created.`);
+      resolve(outputPath);
+    });
+
+    // Generate the document
+    docx.generate(out);
   });
 };
