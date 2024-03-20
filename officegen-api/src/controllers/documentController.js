@@ -1,38 +1,27 @@
-const officegen = require('officegen');
-const fs = require('fs');
-const path = require('path');
+const express = require('express');
+const router = express.Router();
+const documentService = require('../services/documentService');
 
-// Function to create a DOCX file with basic text input
-exports.createDocxWithText = async (text, outputPath = 'output.docx') => {
-  return new Promise((resolve, reject) => {
-    const docx = officegen({
-      type: 'docx',
-      orientation: 'portrait',
-    });
+// POST endpoint to create a document with text
+router.post('/create-document', async (req, res) => {
+  try {
+    // Extract text from request body
+    const { text } = req.body;
 
-    docx.on('error', (err) => {
-      console.error('officegen error:', err);
-      reject(err);
-    });
+    // Validate input
+    if (!text) {
+      return res.status(400).send({ message: 'Text is required' });
+    }
 
-    // Add a paragraph with the provided text
-    const pObj = docx.createP();
-    pObj.addText(text);
+    // Call the document service to create the document with the provided text
+    const documentPath = await documentService.createDocumentWithText(text);
 
-    // Define the output stream
-    const out = fs.createWriteStream(path.join(__dirname, '..', '..', 'examples', outputPath));
+    // Respond with the path of the created document
+    res.status(201).send({ message: 'Document created successfully', path: documentPath });
+  } catch (error) {
+    console.error('Failed to create document:', error);
+    res.status(500).send({ message: 'Failed to create document' });
+  }
+});
 
-    out.on('error', (err) => {
-      console.error('File stream error:', err);
-      reject(err);
-    });
-
-    out.on('close', () => {
-      console.log(`${outputPath} has been created.`);
-      resolve(outputPath);
-    });
-
-    // Generate the document
-    docx.generate(out);
-  });
-};
+module.exports = router;
