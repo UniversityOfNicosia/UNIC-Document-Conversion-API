@@ -1,6 +1,6 @@
 # Officegen API
 
-This directory contains a Node.js API for document conversion using the officegen library. Follow the steps below to set up the development environment.
+This directory contains a Node.js API for document conversion using the officegen library. The API now supports creating `.docx` documents with custom text input. Follow the steps below to set up the development environment and learn how to use the new features.
 
 ## Setting Up the Development Environment
 
@@ -31,17 +31,19 @@ This command will start the Node.js server, typically on port 3000, unless confi
 
 ## Using the API
 
-To convert a document, send a POST request to `/convert` with the document type and content. The API currently supports converting documents to formats like DOCX, PPTX, etc.
+### Creating a Document with Custom Text
+
+To create a `.docx` document containing custom text, send a POST request to `/api/create-document` with the text in the request body.
 
 Example request using `curl`:
 
 ```shell
-curl -X POST http://localhost:3000/convert \
+curl -X POST http://localhost:3000/api/create-document \
      -H "Content-Type: application/json" \
-     -d '{"type":"docx", "content":"base64EncodedContent"}'
+     -d '{"text":"Hello, world!"}'
 ```
 
-Replace `"base64EncodedContent"` with the actual Base64 encoded content of the document you wish to convert.
+The API will create a `.docx` document containing the provided text and return the path to the created document.
 
 ## Running Tests
 
