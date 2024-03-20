@@ -3,6 +3,7 @@ fastapi
 uvicorn
 pydantic
 pytest
+python-dotenv
 requests
 httpx
 boto3
