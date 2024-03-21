@@ -5,10 +5,10 @@ exports.createDocumentWithStructure = async (elements) => {
   try {
     const timestamp = new Date().getTime();
     const outputPath = `document_${timestamp}.docx`;
-    const resultPath = await officegenHelper.createDocxWithText(text, outputPath);
+    const resultPath = await officegenHelper.createDocxWithStructure(elements, outputPath);
     return resultPath;
   } catch (error) {
-    console.error('Error creating document with text:', error);
+    console.error('Error creating document with structured elements:', error);
     throw error;
   }
 };
