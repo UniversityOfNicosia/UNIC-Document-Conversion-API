@@ -28,6 +28,16 @@ exports.createDocxWithStructure = async (elements, outputPath = 'structured_docu
             bullet.addText(item);
           });
           break;
+        case 'list':
+          element.items.forEach(item => {
+            let list = docx.createListOfNumbers();
+            list.addText(item);
+          });
+          break;
+        case 'footnotes':
+          let footnotes = docx.createP();
+          footnotes.addText(element.text, { font_size: 10 });
+          break;
         default:
           console.log(`Unsupported element type: ${element.type}`);
       }

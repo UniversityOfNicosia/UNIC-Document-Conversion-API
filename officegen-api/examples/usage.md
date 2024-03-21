@@ -34,6 +34,18 @@ Content-Type: application/json
         "Item 2",
         "Item 3"
       ]
+    },
+    {
+      "type": "bullet",
+      "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+      ]
+    },
+    {
+      "type": "footnotes",
+      "text": "This is document footnotes"
     }
   ]
 }
