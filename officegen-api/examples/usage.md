@@ -36,7 +36,7 @@ Content-Type: application/json
       ]
     },
     {
-      "type": "bullet",
+      "type": "list",
       "items": [
         "Item 1",
         "Item 2",
