@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const documentService = require('../services/documentService');
 
-// POST endpoint to create a styled document with structured elements
+// POST endpoint to create a document with structured elements
 router.post('/create-document', async (req, res) => {
   try {
     const { documentElements, documentStyles } = req.body;

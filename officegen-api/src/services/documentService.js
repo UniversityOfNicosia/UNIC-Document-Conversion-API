@@ -8,7 +8,7 @@ exports.createDocumentWithStructure = async (elements, styles) => {
     const resultPath = await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
     return resultPath;
   } catch (error) {
-    console.error('Error creating styled document:', error);
+    console.error('Error creating document:', error);
     throw error;
   }
 };

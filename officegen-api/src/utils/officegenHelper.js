@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to create a DOCX file with structured elements
-exports.createDocxWithStructure = async (elements, styles, outputPath = 'styled_document.docx') => {
+exports.createDocxWithStructure = async (elements, styles, outputPath = 'document.docx') => {
   return new Promise((resolve, reject) => {
     const docx = officegen('docx');
     docx.on('error', err => reject(err));
