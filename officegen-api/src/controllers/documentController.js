@@ -9,7 +9,7 @@ router.post('/create-document', async (req, res) => {
     if (!documentElements ) {
       return res.status(400).send({ message: 'Document elements are required' });
     }
-    const documentPath = await documentService.createDocumentWithText(documentElements);
+    const documentPath = await documentService.createDocumentWithStructure(documentElements);
     res.status(201).send({ message: 'Document created successfully', path: documentPath });
   } catch (error) {
     console.error('Failed to create document:', error);
