@@ -50,7 +50,6 @@ Content-Type: application/json
   ],
     "documentStyles": 
     {
-      "backgroundColor": "#FFFFFF",
       "textColor": "#000000",
       "fontFamily": 
       {
