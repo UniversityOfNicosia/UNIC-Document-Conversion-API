@@ -4,7 +4,7 @@ const officegenHelper = require('../utils/officegenHelper');
 exports.createDocumentWithStructure = async (elements, styles) => {
   try {
     const timestamp = new Date().getTime();
-    const outputPath = `styled_document_${timestamp}.docx`;
+    const outputPath = `document_${timestamp}.docx`;
     const resultPath = await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
     return resultPath;
   } catch (error) {
