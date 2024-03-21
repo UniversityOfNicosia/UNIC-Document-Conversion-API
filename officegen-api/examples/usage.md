@@ -14,7 +14,28 @@ Content-Type: application/json
 
 ```json
 {
-  "text": "Hello, world!"
+  "documentElements": [
+    {
+      "type": "title",
+      "text": "Document Title"
+    },
+    {
+      "type": "subtitle",
+      "text": "Document Subtitle"
+    },
+    {
+      "type": "paragraph",
+      "text": "This is a simple paragraph."
+    },
+    {
+      "type": "bullet",
+      "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+      ]
+    }
+  ]
 }
 ```
 
