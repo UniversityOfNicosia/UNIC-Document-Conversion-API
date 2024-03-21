@@ -48,17 +48,17 @@ Content-Type: application/json
       "text": "This is document footnotes"
     }
   ],
-  {
-    "documentStyles": {
+    "documentStyles": 
+    {
       "backgroundColor": "#FFFFFF",
       "textColor": "#000000",
-      "fontFamily": {
+      "fontFamily": 
+      {
         "title": "Arial",
         "subtitle": "Times New Roman",
         "body": "Calibri"
       }
     }
-  }
 }
 ```
 
