@@ -6,13 +6,16 @@ const documentService = require('../services/documentService');
 router.post('/create-document', async (req, res) => {
   try {
     const { documentElements, documentStyles } = req.body;
+
     if (!documentElements) {
       return res.status(400).send({ message: 'Document elements are required.' });
     }
+
     // Optional: Validate the presence of document styles
     // if (!documentStyles) {
     //   return res.status(400).send({ message: 'Document styles are required.' });
     // }
+    
     const documentPath = await documentService.createDocumentWithStructure(documentElements, documentStyles);
     res.status(201).send({ message: 'Document created successfully.', path: documentPath });
   } catch (error) {
