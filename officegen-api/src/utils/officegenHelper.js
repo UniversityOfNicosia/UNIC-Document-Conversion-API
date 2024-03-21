@@ -51,7 +51,7 @@ exports.createDocxWithStructure = async (elements, styles, outputPath = 'documen
           break;
         case 'footnotes':
           let footnote = docx.createP();
-          footnote.addText(element.text, options);
+          footnote.addText(element.text, { ...options, italic: true});
           break;
         default:
           console.log(`Unsupported element type: ${element.type}`);
