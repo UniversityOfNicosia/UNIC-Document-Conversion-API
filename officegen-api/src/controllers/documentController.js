@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const documentService = require('../services/documentService');
 
+// POST endpoint to export a document to MyFiles
+router.post('/export-to-myfiles', async (req, res) => {
+  try {
+    const { documentElements, documentStyles, jwtToken, apiKey, appId } = req.body;
+    const resultMessage = await documentService.exportToMyFiles(documentElements, documentStyles, jwtToken, apiKey, appId);
+    res.status(200).send({ message: resultMessage });
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to export document to MyFiles.' });
+  }
+});
+
+
 // POST endpoint to create a document with structured elements
 router.post('/create-document', async (req, res) => {
   try {
