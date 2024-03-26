@@ -1,4 +1,4 @@
-# Officegen API Usage Examples
+# UNIC Document Conversion API - Usage Guide
 
 This document provides examples of how to use the Officegen API to create `.docx` documents with custom text. Future updates will include more complex document structures and styles.
 
@@ -89,13 +89,3 @@ If the request fails due to missing text or other issues, the API will respond w
 ```
 
 Status code: 400
-
-## Future Enhancements
-
-Future versions of the API will support:
-
-- Complex document structures (titles, subtitles, lists, bullets, footnotes, etc.)
-- Styling options (background color, text color, font, etc.)
-- Direct document download links or streaming
-
-Stay tuned for updates and additional features!
