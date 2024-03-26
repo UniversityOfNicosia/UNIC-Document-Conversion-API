@@ -23,10 +23,10 @@ npm login --registry=https://registry.npmjs.org/
 Then, install the package using npm:
 
 ```bash
-npm install @your-org/unic-document-conversion-library --save
+npm install @university-of-nicosia/unic-document-conversion-library --save
 ```
 
-Replace `@your-org` with your organization's scope on NPM to match where your private package is published.
+Replace `@university-of-nicosia` with your organization's scope on NPM to match where your private package is published.
 
 ## Setting Up Your Project
 
@@ -43,7 +43,7 @@ To use the library, you need to import it into your Node.js application, configu
 Here's a basic example of how to use the library:
 
 ```javascript
-const documentLibrary = require('@your-org/unic-document-conversion-library');
+const documentLibrary = require('@university-of-nicosia/unic-document-conversion-library');
 
 // Define your document structure and styles
 const inputJson = {
