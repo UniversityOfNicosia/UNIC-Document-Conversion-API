@@ -14,7 +14,9 @@ jobs:
         with:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org/'
-      - run: cd officegen-api && npm ci
-      - run: cd officegen-api && npm publish --access private
+      - run: npm ci
+        working-directory: officegen-api/
+      - run: npm publish --access private
+        working-directory: officegen-api/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
