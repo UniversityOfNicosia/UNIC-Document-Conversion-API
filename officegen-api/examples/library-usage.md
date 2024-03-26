@@ -26,8 +26,6 @@ Then, install the package using npm:
 npm install @university-of-nicosia/unic-document-conversion-library --save
 ```
 
-Replace `@university-of-nicosia` with your organization's scope on NPM to match where your private package is published.
-
 ## Setting Up Your Project
 
 1. **Create a new Node.js project** (if you haven't already) by running `npm init` in your project directory and following the prompts.
