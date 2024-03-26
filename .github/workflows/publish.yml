@@ -17,7 +17,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
       - run: npm install
         working-directory: officegen-api/
-      - run: npm publish --access private
+      - run: npm publish
         working-directory: officegen-api/
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
