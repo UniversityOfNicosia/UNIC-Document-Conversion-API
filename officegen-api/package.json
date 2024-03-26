@@ -9,7 +9,7 @@
   },
   "private": true,
   "dependencies": {
-    "express": "^4.19.1",
+    "express": "^4.19.2",
     "officegen": "^0.6.5"
   },
   "devDependencies": {
