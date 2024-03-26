@@ -1,11 +1,12 @@
 const express = require('express');
 const documentRouter = require('./controllers/documentController');
 
-function createServer() {
-    const app = express();
-    app.use(express.json());
-    app.use('/api', documentRouter);
-    return app;
-}
+const app = express();
+const port = process.env.PORT || 3000;
 
-module.exports = { createServer };
+app.use(express.json());
+app.use('/api', documentRouter);
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
