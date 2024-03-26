@@ -1,8 +1,8 @@
 {
-  "name": "unic-document-conversion-api",
+  "name": "unic-document-conversion-library",
   "version": "1.0.0",
-  "description": "API for document conversion using officegen",
-  "main": "src/app.js",
+  "description": "A library and API for document conversion using officegen",
+  "main": "src/documentLibrary.js",
   "scripts": {
     "start": "node src/app.js",
     "test": "jest"
