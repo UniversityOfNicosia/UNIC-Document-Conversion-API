@@ -14,10 +14,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-          registry-url: 'https://registry.npmjs.org/'
-      - run: npm install
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@universityofnicosia'
+      - run: npm ci
         working-directory: officegen-api/
-      - run: npm publish --access restricted
+      - run: npm publish
         working-directory: officegen-api/
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

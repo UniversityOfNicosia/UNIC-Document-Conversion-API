@@ -14,17 +14,20 @@ Before you begin, ensure you have the following installed:
 
 ## Installation
 
-As this is a private package, you'll need access to the NPM registry where the package is hosted. Make sure you're authenticated to the registry by running:
+Since this package is hosted on the GitHub Packages registry associated with the UniversityOfNicosia organization, you'll need to authenticate to GitHub Packages to install the library. Configure your project to use GitHub Packages:
 
-```bash
-npm login --registry=https://registry.npmjs.org/
-```
-
-Then, install the package using npm:
-
-```bash
-npm install @university-of-nicosia/unic-document-conversion-library --save
-```
+1. Create or edit the `.npmrc` file in your project's root directory to include the following line:
+   ```
+   @universityofnicosia:registry=https://npm.pkg.github.com
+   ```
+2. Authenticate to GitHub Packages. You can use a personal access token (PAT) with read:packages permission. Configure the token in your global `~/.npmrc` file (not the project's `.npmrc` to avoid committing sensitive information):
+   ```
+   //npm.pkg.github.com/:_authToken=YOUR_PERSONAL_ACCESS_TOKEN
+   ```
+3. Install the package using npm:
+   ```bash
+   npm install @universityofnicosia/unic-document-conversion-library --save
+   ```
 
 ## Setting Up Your Project
 
@@ -41,7 +44,7 @@ To use the library, you need to import it into your Node.js application, configu
 Here's a basic example of how to use the library:
 
 ```javascript
-const documentLibrary = require('@university-of-nicosia/unic-document-conversion-library');
+const documentLibrary = require('@universityofnicosia/unic-document-conversion-library');
 
 // Define your document structure and styles
 const inputJson = {

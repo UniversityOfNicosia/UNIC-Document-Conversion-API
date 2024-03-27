@@ -1,5 +1,5 @@
 {
-  "name": "@university-of-nicosia/unic-document-conversion-library",
+  "name": "@universityofnicosia/unic-document-conversion-library",
   "version": "1.0.0",
   "description": "A library and API for document conversion using officegen",
   "main": "src/documentLibrary.js",
@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@universityofnicosia"
   }
 }
