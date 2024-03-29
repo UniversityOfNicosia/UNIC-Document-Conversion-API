@@ -6,7 +6,7 @@ app.use(express.json());
 
 app.post('/api/create-document', async (req, res) => {
   try {
-    const resultPath = await documentLibrary.createDocumentWithStructure(req.body);
+    const resultPath = await documentLibrary.createDocumentWithStructure(req.body.elements, req.body.styles);
     res.status(201).send({ message: 'Document created successfully.', path: resultPath });
   } catch (error) {
     console.error('Failed to create document:', error);

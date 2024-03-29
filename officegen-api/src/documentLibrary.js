@@ -1,13 +1,12 @@
 const officegenHelper = require('./utils/officegenHelper');
 
-exports.createDocumentWithStructure = async (inputJson) => {
+exports.createDocumentWithStructure = async (elements, styles) => {
   try {
-    const { documentElements, documentStyles } = inputJson;
-    if (!documentElements) throw new Error('Document elements are required.');
+    if (!elements) throw new Error('Document elements are required.');
 
     const timestamp = new Date().getTime();
     const outputPath = `document_${timestamp}.docx`;
-    const resultPath = await officegenHelper.createDocxWithStructure(documentElements, documentStyles, outputPath);
+    const resultPath = await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
     return resultPath;
   } catch (error) {
     throw error;
