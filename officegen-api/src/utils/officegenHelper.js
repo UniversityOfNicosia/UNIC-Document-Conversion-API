@@ -102,8 +102,9 @@ exports.createDocxBuffer = async (elements, styles) => {
     docx.generate(bufferStream);
 
     bufferStream.on('finish', () => {
-      console.log(bufferStream.getContents().length + ' bytes written to buffer.');
-      resolve(bufferStream.getContents());
+      const buffer = bufferStream.getContents();
+      console.log(buffer.length + ' bytes written to buffer.');
+      resolve(buffer);
     });
 
     bufferStream.on('error', (err) => {
