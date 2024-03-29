@@ -104,5 +104,12 @@ exports.createDocxBuffer = async (elements, styles) => {
     bufferStream.on('finish', () => {
       resolve(bufferStream.getContents());
     });
+
+    bufferStream.on('error', (err) => {
+      console.error('Buffer stream error:', err);
+      reject(err);
+    });
+
+    bufferStream.end();
   });
 };
