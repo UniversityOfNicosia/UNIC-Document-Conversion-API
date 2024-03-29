@@ -48,7 +48,7 @@ const documentLibrary = require('@universityofnicosia/unic-document-conversion-l
 
 // Define your document structure and styles
 const inputJson = {
-  documentElements: [
+  elements: [
     { type: 'title', text: 'Document Title' },
     { type: 'subtitle', text: 'Subtitle Here' },
     { type: 'paragraph', text: 'This is a simple paragraph.' },
@@ -57,7 +57,7 @@ const inputJson = {
       items: ['First item', 'Second item', 'Third item']
     }
   ],
-  documentStyles: {
+  styles: {
     fontFamily: {
       title: 'Arial',
       body: 'Calibri'

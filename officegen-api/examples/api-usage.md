@@ -14,7 +14,8 @@ Content-Type: application/json
 
 ```json
 {
-  "documentElements": [
+  "elements": 
+  [
     {
       "type": "title",
       "text": "Document Title"
@@ -48,16 +49,16 @@ Content-Type: application/json
       "text": "This is document footnotes"
     }
   ],
-    "documentStyles": 
+  "styles": 
+  {
+    "textColor": "#000000",
+    "fontFamily": 
     {
-      "textColor": "#000000",
-      "fontFamily": 
-      {
-        "title": "Arial",
-        "subtitle": "Times New Roman",
-        "body": "Calibri"
-      }
+      "title": "Arial",
+      "subtitle": "Times New Roman",
+      "body": "Calibri"
     }
+  }
 }
 ```
 
