@@ -103,7 +103,6 @@ exports.createDocxBuffer = async (elements, styles) => {
 
     bufferStream.on('finish', () => {
       const buffer = bufferStream.getContents();
-      console.log(buffer.length + ' bytes written to buffer.');
       resolve(buffer);
     });
 

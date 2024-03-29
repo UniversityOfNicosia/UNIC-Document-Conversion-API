@@ -16,7 +16,6 @@ exports.createDocumentWithStructure = async (elements, styles) => {
 exports.createDocumentBuffer = async (elements, styles) => {
   try {
     const buffer = await officegenHelper.createDocxBuffer(elements, styles);
-    console.log(buffer.length + ' bytes written to buffer.');
     return buffer;
   } catch (error) {
     throw error;
