@@ -102,6 +102,7 @@ exports.createDocxBuffer = async (elements, styles) => {
     docx.generate(bufferStream);
 
     bufferStream.on('finish', () => {
+      console.log(bufferStream.getContents().length + ' bytes written to buffer.');
       resolve(bufferStream.getContents());
     });
 
@@ -109,7 +110,5 @@ exports.createDocxBuffer = async (elements, styles) => {
       console.error('Buffer stream error:', err);
       reject(err);
     });
-
-    bufferStream.end();
   });
 };
