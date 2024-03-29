@@ -13,3 +13,12 @@ exports.createDocumentWithStructure = async (inputJson) => {
     throw error;
   }
 };
+
+exports.createDocumentBuffer = async (elements, styles) => {
+  try {
+    const buffer = await officegenHelper.createDocxBuffer(elements, styles);
+    return buffer;
+  } catch (error) {
+    throw error;
+  }
+};
