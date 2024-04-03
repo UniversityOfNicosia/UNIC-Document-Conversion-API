@@ -1,0 +1,16 @@
+{
+    "name": "Node.js Environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "officegen-api",
+    "workspaceFolder": "/workspace/officegen-api",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                "mhutchie.git-graph"
+            ]
+        }
+    }
+  }
+  
