@@ -36,6 +36,6 @@
     "@types/react-syntax-highlighter": "^15.5.11",
     "markdown-it": "^14.1.0",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   }
 }
