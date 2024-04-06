@@ -1,0 +1,21 @@
+{
+  "name": "@universityofnicosia/document-conversion-solutions",
+  "version": "1.0.0",
+  "description": "A library and API for document conversion using officegen",
+  "main": "src/documentLibrary.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "officegen": "^0.6.5",
+    "stream-buffers": "^3.0.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@universityofnicosia"
+  }
+}

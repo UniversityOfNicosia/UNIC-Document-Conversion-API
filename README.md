@@ -1,33 +1,25 @@
-# Document Conversion Code Snippets 📄🔄
+# Document Conversion Solutions 📑🔄
 
-Welcome to the Document Conversion Code Snippets repository! This is a comprehensive collection of JavaScript/TypeScript and Python code snippets designed to aid developers in converting documents between various formats, notably from Markdown to Google Docs, Word, PowerPoint, and other popular formats.
+Welcome to Document Conversion Solutions! This repository is a comprehensive collection of tools and libraries dedicated to the export and conversion of document formats like DOCX, PPTX, and XLSX. It encompasses Python APIs, frontend JavaScript solutions, and an npm package to cater to a wide range of document conversion needs.
 
-## Why This Repository? 🤔
+## Introduction 🌐
 
-During my year working at the [@UniversityOfNicosia](https://github.com/UniversityOfNicosia), I encountered multiple document conversion challenges. This repository emerged from the necessity to provide developers with a respite from such challenges, granting open-source access to a variety of beneficial code snippets I've assembled over time.
+Document Conversion Solutions was created to provide developers and users with an extensive set of tools for document conversion, featuring:
 
-## Options for Document Conversion
+- **Python API**: A versatile backend solution for converting documents into various formats.
+- **Frontend JavaScript Solutions**: Interactive web applications for on-the-fly document conversion.
+- **NPM Package**: A ready-to-use package for integrating document conversion capabilities into your Node.js applications.
 
-We offer two primary options for document conversion:
+## Getting Started 🚀
 
-### 1. JavaScript/TypeScript for Next.js
+To start using Document Conversion Solutions, you'll need to set up your environment, install the necessary dependencies, and explore the various components:
 
-This option is ideal for developers looking to implement document conversion within a Next.js application. It includes snippets for converting Markdown to HTML, Word (.docx), PowerPoint (.pptx), and Google Docs format.
+- **Python API**: For more information, refer to the [Python API README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/python-api/README.md).
+- **Frontend JavaScript Solutions**: Setup instructions and details can be found in the [Frontend JavaScript README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/document-conversion/README.md).
+- **NPM Package**: Learn how to use the npm package by visiting the [Officegen API README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/officegen-api/README.md).
 
-- **Get Started**: Navigate to the [document-conversion README](https://github.com/HlexNC/Document-Conversion-Snippets/blob/feature/104-docker/document-conversion/README.md) for setup instructions and more details.
+## Contributing 🤝
 
-### 2. Python API
+We welcome contributions! If you have enhancements, bug fixes, or suggestions, please feel free to submit a pull request or open an issue. Let's collaborate to make Document Conversion Solutions even better.
 
-For those who prefer working with Python, this API provides a straightforward way to convert documents. It includes a setup for a virtual environment, dependency management, and instructions for installing Pandoc, a crucial tool for document conversion.
-
-- **Get Started**: Check out the [python-api README](https://github.com/HlexNC/Document-Conversion-Snippets/blob/feature/104-docker/python-api/README.md) for setup instructions and further information.
-
-## Important Notice 📜
-
-I'm excited to share these snippets with the developer community. In the spirit of open-source, if you use or adapt these snippets in your projects, please extend due credit to the original creator.
-
-## Contributing 🧑‍💻
-
-If you come across any challenges or find an improvement, I'd appreciate it if you could contribute to this repository by submitting a pull request or opening an issue. Together, we can make this an invaluable resource for the developer community!
-
-Happy coding! 🚀💻
+Happy Document Converting! 🎉📄

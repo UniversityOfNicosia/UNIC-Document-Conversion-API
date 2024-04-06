@@ -1,7 +1,7 @@
 version: 2
 updates:  
   - package-ecosystem: "npm"
-    directory: "/document-conversion"
+    directory: "/officegen-api"
     schedule:
       interval: "weekly"
       day: "saturday"
@@ -9,11 +9,18 @@ updates:
       - "HlexNC"
 
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/python-api"
     schedule:
       interval: "weekly"
       day: "saturday"
     reviewers:
       - "HlexNC"
 
+  - package-ecosystem: "npm"
+    directory: "/document-conversion"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    reviewers:
+      - "HlexNC"
 # Interval can be 'live', 'daily', 'weekly', or 'monthly'
