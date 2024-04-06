@@ -1,31 +1,25 @@
-# UNIC Document Conversion API 📄🔄
+# Document Conversion Solutions 📑🔄
 
-Welcome to the UNIC Document Conversion API repository! This repository hosts a multi-faceted application designed for the University of Nicosia, aimed at facilitating the conversion of documents between various formats. It seamlessly integrates with Accelerate-API for secure file handling and storage, addressing both educational and administrative needs.
+Welcome to Document Conversion Solutions! This repository is a comprehensive collection of tools and libraries dedicated to the export and conversion of document formats like DOCX, PPTX, and XLSX. It encompasses Python APIs, frontend JavaScript solutions, and an npm package to cater to a wide range of document conversion needs.
 
-## Why This Repository? 🤔
+## Introduction 🌐
 
-At the University of Nicosia, we frequently encounter the need for efficient and reliable document conversion solutions. This repository is a product of those needs, providing an open-source resource for developers at UNIC and beyond. It's designed to streamline document conversion processes, offering a straightforward API that integrates document conversion capabilities with the university's existing systems.
+Document Conversion Solutions was created to provide developers and users with an extensive set of tools for document conversion, featuring:
 
-## Features of the Document Conversion API
+- **Python API**: A versatile backend solution for converting documents into various formats.
+- **Frontend JavaScript Solutions**: Interactive web applications for on-the-fly document conversion.
+- **NPM Package**: A ready-to-use package for integrating document conversion capabilities into your Node.js applications.
 
-The API offers robust solutions for document conversion, tailored for both Python and Node.js developers. Here's what you can expect:
+## Getting Started 🚀
 
-- **Markdown to DOCX Conversion**: Easily convert Markdown files to Word documents, maintaining formatting and structure.
-- **Markdown to PPTX Conversion**: Transform Markdown into PowerPoint presentations, suitable for lectures, reports, and more.
+To start using Document Conversion Solutions, you'll need to set up your environment, install the necessary dependencies, and explore the various components:
 
-## Getting Started
+- **Python API**: For more information, refer to the [Python API README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/python-api/README.md).
+- **Frontend JavaScript Solutions**: Setup instructions and details can be found in the [Frontend JavaScript README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/document-conversion/README.md).
+- **NPM Package**: Learn how to use the npm package by visiting the [Officegen API README](https://github.com/UniversityOfNicosia/Document-Conversion-Solutions/blob/main/officegen-api/README.md).
 
-To begin using the Document Conversion API, you'll need to set up your environment, install dependencies, and familiarize yourself with the API's endpoints and usage. Detailed setup instructions and documentation can be found within this repository.
+## Contributing 🤝
 
-- **Python API**: Check out the [python-api README](https://github.com/UniversityOfNicosia/UNIC-Document-Conversion-API/blob/main/python-api/README.md) for setup instructions and further information.
-- **Officegen API**: Visit the [officegen-api README](https://github.com/UniversityOfNicosia/UNIC-Document-Conversion-API/blob/main/officegen-api/README.md) for setup instructions and further information.
+We welcome contributions! If you have enhancements, bug fixes, or suggestions, please feel free to submit a pull request or open an issue. Let's collaborate to make Document Conversion Solutions even better.
 
-## Important Notice 📜
-
-This repository is open-source and intended for use by the developer community at the University of Nicosia and beyond. We encourage the use and adaptation of these resources in your projects, and we appreciate credit being given to the original creators.
-
-## Contributing 👩‍💻
-
-We welcome contributions from the community! If you encounter any issues, have suggestions for improvements, or have developed enhancements, please contribute by submitting a pull request or opening an issue. Let's work together to make this API a valuable tool for everyone involved.
-
-Happy coding! 🚀💻
+Happy Document Converting! 🎉📄
