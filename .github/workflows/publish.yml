@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '14'
           registry-url: 'https://npm.pkg.github.com'
-          # scope: '@universityofnicosia'
+          scope: '@hlexnc'
       - run: npm install
         working-directory: officegen-api/
       - run: npm publish
