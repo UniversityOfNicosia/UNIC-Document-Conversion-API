@@ -1,0 +1,327 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+textarea.markdown {
+  color: rgb(var(--foreground-rgb)); /* This line sets the textarea text color to black */
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.preview {
+  color: var(--foreground-rgb);
+  border: 1px solid rgba(var(--foreground-rgb), 0.2);
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.export-btn {
+  display: block;
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.export-btn:hover {
+  background-color: #0058c8;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+h3 {
+  font-size: 1.17em;
+  margin: 1em 0;
+}
+
+h4 {
+  font-size: 1em;
+  margin: 1.33em 0;
+}
+
+h5 {
+  font-size: 0.83em;
+  margin: 1.67em 0;
+}
+
+h6 {
+  font-size: 0.67em;
+  margin: 2.33em 0;
+}
+
+p {
+  margin: 1em 0;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding: 0 1em;
+  color: rgba(var(--foreground-rgb), 0.5);
+  border-left: 0.25em solid rgba(var(--foreground-rgb), 0.5);
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+ul, ol {
+  padding-left: 2em;
+}
+
+ul > li, ol > li {
+  margin: 0.5em 0;
+}
+
+ul > li > *:first-child, ol > li > *:first-child {
+  margin-top: 0;
+}
+
+ul > li > *:last-child, ol > li > *:last-child {
+  margin-bottom: 0;
+}
+
+a {
+  color: rgb(var(--foreground-rgb));
+  text-decoration: underline;
+}
+
+a:hover {
+  color: rgb(var(--foreground-rgb));
+  text-decoration: none;
+}
+
+strong {
+  font-weight: bold;
+}
+
+img {
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+table > thead > tr > th {
+  border-bottom: 1px solid rgba(var(--foreground-rgb), 0.2);
+}
+
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
+  padding: 0.5em 1em;
+  border: 1px solid rgba(var(--foreground-rgb), 0.2);
+}
+
+table > thead > tr > th {
+  text-align: left;
+}
+
+table > caption + thead > tr:first-child > th,
+table > colgroup + thead > tr:first-child > th,
+table > thead:first-child > tr:first-child > th,
+table > caption + thead > tr:first-child > td,
+table > colgroup + thead > tr:first-child > td,
+table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+
+table > tbody + tbody {
+  border-top: 1px solid rgba(var(--foreground-rgb), 0.2);
+}
+
+table > tfoot > tr > td {
+  text-align: left;
+  border-top: 1px solid rgba(var(--foreground-rgb), 0.2);
+}
+
+kbd {
+  padding: 0.1em 0.4em;
+  font-size: 0.8em;
+  color: rgb(var(--foreground-rgb));
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  border-radius: 0.2em;
+}
+
+kbd > kbd {
+  padding: 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+pre {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+pre > code {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+pre > code > span > span > span > span > span > span > span > span > span {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  white-space: pre;
+}
+
+code {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  padding: 0.2em 0.4em;
+  font-size: 0.85em;
+  border-radius: 0.2em;
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid rgba(var(--foreground-rgb), 0.2);
+  margin: 1em 0;
+}
+
+svg {
+  fill: currentColor;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.underline.strike {
+  text-decoration: underline line-through;
+}
