@@ -2,67 +2,58 @@
 
 ## Introduction
 
-The Document Conversion Solutions Library is a powerful Node.js module that enables the creation of `.docx` documents from structured JSON inputs. Built on top of the `officegen` library, it offers a flexible way to generate documents with custom styles and various elements such as text, titles, subtitles, lists, bullets, and footnotes.
+The Document Conversion Solutions Library is a powerful Node.js module designed for creating `.docx` documents from structured JSON inputs. Leveraging the `officegen` library, it facilitates document generation with customizable styles and elements like text, titles, subtitles, lists, bullets, and footnotes.
 
-This guide covers the process of setting up, installing, and using this private NPM package within your projects.
+This guide details the setup, installation, and usage process of this NPM package within your projects.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Ensure the following are installed before proceeding:
 - Node.js (v12.x or higher recommended)
-- npm (usually comes with Node.js)
+- npm (comes bundled with Node.js)
 
 ## Installation
 
-Since this package is hosted on the GitHub Packages registry associated with the UniversityOfNicosia organization, you'll need to authenticate to GitHub Packages to install the library. Configure your project to use GitHub Packages:
+This package is available on the NPM registry. To install it, simply run the following command in your project's root directory:
 
-1. Create or edit the `.npmrc` file in your project's root directory to include the following line:
-   ```
-   @:registry=https://npm.pkg.github.com
-   ```
-2. Authenticate to GitHub Packages. You can use a personal access token (PAT) with read:packages permission. Configure the token in your global `~/.npmrc` file (not the project's `.npmrc` to avoid committing sensitive information):
-   ```
-   //npm.pkg.github.com/:_authToken=YOUR_PERSONAL_ACCESS_TOKEN
-   ```
-3. Install the package using npm:
-   ```bash
-   npm install @ --save
-   ```
+```bash
+npm install @hlexnc/document-conversion-solutions --save
+```
 
 ## Setting Up Your Project
 
-1. **Create a new Node.js project** (if you haven't already) by running `npm init` in your project directory and following the prompts.
+1. **Initialize a new Node.js project** (if not already done) by executing `npm init` in your project directory and completing the setup prompts.
 
-2. **Install the Document Conversion Solutions Library** using the command provided in the Installation section above.
+2. **Install the Document Conversion Solutions Library** with the command mentioned in the Installation section.
 
 ## Usage
 
-To use the library, you need to import it into your Node.js application, configure your document structure and styles in JSON format, and call the library function to create a document.
+Import the library into your Node.js application, configure your document structure and styles in JSON, and invoke the library function to create a document.
 
 ### Basic Example
 
-Here's a basic example of how to use the library:
+Here's a simple example demonstrating the library usage:
 
 ```javascript
-const documentLibrary = require('@');
+const documentLibrary = require('@hlexnc/document-conversion-solutions');
 
 // Define your document structure and styles
 const inputJson = {
-  elements: [
-    { type: 'title', text: 'Document Title' },
-    { type: 'subtitle', text: 'Subtitle Here' },
-    { type: 'paragraph', text: 'This is a simple paragraph.' },
+  "elements": [
+    { "type": "title", "text": "Document Title" },
+    { "type": "subtitle", "text": "Subtitle Here" },
+    { "type": "paragraph", "text": "This is a simple paragraph." },
     {
-      type: 'list',
-      items: ['First item', 'Second item', 'Third item']
+      "type": "list",
+      "items": ["First item", "Second item", "Third item"]
     }
   ],
-  styles: {
-    fontFamily: {
-      title: 'Arial',
-      body: 'Calibri'
+  "styles": {
+    "fontFamily": {
+      "title": "Arial",
+      "body": "Calibri"
     },
-    textColor: '#000000'
+    "textColor": "#000000"
   }
 };
 
@@ -74,16 +65,16 @@ documentLibrary.createDocumentWithStructure(inputJson)
 
 ### Error Handling
 
-The library provides error handling mechanisms. Ensure your application properly catches and handles these errors, especially for invalid inputs or issues during document generation.
+It's crucial to implement error handling in your application to manage any potential issues, such as invalid inputs or problems during document generation.
 
 ## Advanced Usage
 
-For more complex documents, refer to the `officegen` documentation to understand all supported elements and styles. The Document Conversion Solutions Library supports these features as part of the `inputJson` configuration.
+For creating more complex documents, consult the `officegen` documentation to familiarize yourself with the full spectrum of supported elements and styles. The Document Conversion Solutions Library accommodates these configurations through the `inputJson` structure.
 
 ## Contributing
 
-We welcome contributions! If you have suggestions for improvements or encounter any issues, please file a report in the repository's issues section.
+Contributions are highly appreciated! If you have improvement suggestions or encounter any issues, please submit them via the project's issue tracker.
 
 ## License
 
-This library is provided under the [MIT License](https://opensource.org/licenses/MIT). Please review the license terms before using or contributing to the project.
+This library is distributed under the [MIT License](https://opensource.org/licenses/MIT). Ensure you review the license terms before utilizing or contributing to the project.
