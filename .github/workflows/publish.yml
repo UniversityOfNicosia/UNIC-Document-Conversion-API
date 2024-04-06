@@ -1,0 +1,23 @@
+name: Publish NPM Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@universityofnicosia'
+      - run: npm install
+        working-directory: officegen-api/
+      - run: npm publish
+        working-directory: officegen-api/
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

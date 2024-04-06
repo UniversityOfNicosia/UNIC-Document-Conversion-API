@@ -1,51 +1,89 @@
-# Officegen API
+# Officegen API and Library for Document Conversion
 
-This directory contains a Node.js API for document conversion using the officegen library. The API supports creating `.docx` documents with structured elements and custom styles.
+The Officegen API and Library offer a powerful way to generate `.docx` documents from structured JSON inputs. This guide provides an overview of both the API and the Node.js library usage.
 
 ## Features
 
-- Create `.docx` documents with a variety of elements (text, titles, subtitles, lists, bullets, footnotes).
-- Apply custom styles to document elements (font family, size, color).
+- Generate `.docx` documents with custom text, titles, subtitles, lists, bullets, and footnotes.
+- Easy integration into JavaScript and Node.js projects.
+- Flexible document structure and styling.
 
-## Setting Up the Development Environment
+## Getting Started
 
-### Prerequisites
+### API Usage
 
-- Node.js (v12.x or higher recommended)
-- npm (usually comes with Node.js)
+To create a document using the API, send a POST request to `/api/create-document` with your document structure and style defined in JSON.
 
-### Installing Dependencies
+**Example Request:**
 
-After navigating to the `officegen-api` directory, install the necessary dependencies using npm:
+```json
+POST /api/create-document
+Content-Type: application/json
 
-```shell
-npm install
+{
+  "elements": [
+    {"type": "title", "text": "Document Title"},
+    ...
+  ],
+  "styles": {
+    "textColor": "#000000",
+    "fontFamily": {
+      "title": "Arial",
+      ...
+    }
+  }
+}
 ```
 
-## Running the API
+**Response:**
 
-To start the API server, run:
+The API responds with the path to the created document upon success.
 
-```shell
-npm start
+```json
+{
+  "message": "Document created successfully",
+  "path": "examples/document_123456789.docx"
+}
 ```
 
-Access the API at `http://localhost:3000/api/create-document`.
+### Library Usage
 
-## Using the API
+The UNIC Document Conversion Library enables creation of documents via a Node.js module. Install the library from GitHub Packages, configure your `.npmrc` for authentication, and use the library in your projects.
 
-### Creating a Document
+**Installation:**
 
-Send a POST request to `/api/create-document` with `documentElements` and `documentStyles` in the JSON body.
-
-Example request using `curl`:
-
-```shell
-curl -X POST http://localhost:3000/api/create-document \
-     -H "Content-Type: application/json" \
-     -d '{"documentElements": [{"type": "title", "text": "Hello World"}], "documentStyles": {"fontFamily": {"title": "Arial"}}}'
+```bash
+npm install @universityofnicosia/unic-document-conversion-library --save
 ```
+
+**Example Usage:**
+
+```javascript
+const documentLibrary = require('@universityofnicosia/unic-document-conversion-library');
+
+const inputJson = {
+  "elements": [...],
+  "styles": {...}
+};
+
+documentLibrary.createDocumentWithStructure(inputJson)
+  .then((path) => console.log(`Document created at: ${path}`))
+  .catch((error) => console.error('Error creating document:', error));
+```
+
+## Prerequisites
+
+- Node.js (v12.x or higher)
+- npm
+
+## Documentation
+
+For more detailed examples and error handling, please refer to the `api-usage.md` and `library-usage.md` files in the `examples` directory.
 
 ## Contributing
 
-Contributions are welcome! Please refer to the main repository's CONTRIBUTING.md file for guidelines.
+Contributions are welcome! If you have suggestions or encounter issues, please file a report in the issues section.
+
+## License
+
+This project is provided under the [MIT License](https://opensource.org/licenses/MIT).
