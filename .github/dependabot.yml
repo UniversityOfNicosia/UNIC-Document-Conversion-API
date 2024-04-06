@@ -4,7 +4,7 @@ updates:
     directory: "/officegen-api"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "saturday"
     reviewers:
       - "HlexNC"
 
@@ -12,7 +12,7 @@ updates:
     directory: "/python-api"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "saturday"
     reviewers:
       - "HlexNC"
 
@@ -20,7 +20,7 @@ updates:
     directory: "/document-conversion"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "saturday"
     reviewers:
       - "HlexNC"
 # Interval can be 'live', 'daily', 'weekly', or 'monthly'
