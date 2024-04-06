@@ -1,4 +1,4 @@
-# UNIC Document Conversion API - Usage Guide
+# Document Conversion Solutions API - Usage Guide
 
 This document provides examples of how to use the Officegen API to create `.docx` documents with custom text. Future updates will include more complex document structures and styles.
 
