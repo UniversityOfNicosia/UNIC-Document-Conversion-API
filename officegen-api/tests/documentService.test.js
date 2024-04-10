@@ -47,5 +47,45 @@ describe('Document Conversion API Tests', () => {
     assert(buffer instanceof Buffer, 'Should return a buffer');
     assert(buffer.length > 0, 'Buffer should not be empty');
   });
+
+  
+    it('creates a document with a table', async () => {
+      const elements = [
+        { type: 'title', text: 'Document with Table' },
+        {
+          type: 'table',
+          table: [
+            // Define the table header
+            [
+              { val: "Header 1", opts: { b: true, sz: '24', shd: { fill: "cccccc" } } },
+              { val: "Header 2", opts: { b: true, sz: '24', shd: { fill: "cccccc" } } }
+            ],
+            // Define a few rows of content
+            [ "Row 1, Cell 1", "Row 1, Cell 2" ],
+            [ "Row 2, Cell 1", "Row 2, Cell 2" ]
+          ],
+          tableStyle: {
+            tableColWidth: 4261,
+            tableSize: 24,
+            tableColor: "ada",
+            tableAlign: "left",
+            tableFontFamily: "Comic Sans MS"
+          }
+        }
+      ];
+      const styles = {
+        textColor: '#000000',
+        fontFamily: {
+          body: 'Calibri',
+          title: 'Arial'
+        }
+      };
+      const outputPath = path.join(outDir, 'testDocumentWithTable.docx');
+      await createDocxWithStructure(elements, styles, outputPath);
+  
+      // Verify the document is created
+      assert(fs.existsSync(outputPath), 'The document with a table should exist');
+    });
+  
 });
 
