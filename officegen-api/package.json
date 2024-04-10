@@ -1,6 +1,6 @@
 {
   "name": "@universityofnicosia/unic-document-conversion-library",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A library and API for document conversion using officegen",
   "main": "src/documentLibrary.js",
   "scripts": {

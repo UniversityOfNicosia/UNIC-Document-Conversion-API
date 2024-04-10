@@ -49,8 +49,26 @@ function applyElementsAndStyles(docx, elements, styles) {
         let footnote = docx.createP();
         footnote.addText(element.text, { ...options, italic: true});
         break;
+      case 'codeBlock':
+        let codeBlock = docx.createP();
+        codeBlock.addText(element.text, { font_face: 'Courier New', font_size: 10 });
+        break;
+      case 'table':
+        docx.createTable(element.table, element.tableStyle);
+        break;
+      case 'image':
+        let imageParagraph = docx.createP();
+        imageParagraph.addImage(path.resolve(__dirname, element.path), element.options);
+        break;
+      case 'pageBreak':
+        docx.putPageBreak();
+        break;
+      case 'horizontalLine':
+        let lineParagraph = docx.createP();
+        lineParagraph.addHorizontalLine();
+        break;
       default:
-        console.log(`Unsupported element type: ${element.type}`);
+        console.warn(`Unsupported element type: ${element.type}`);
         let unsupported = docx.createP();
         unsupported.addText(element.text, options);
         break;
