@@ -4,11 +4,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to apply elements and styles to a DOCX document
-function applyElementsAndStyles(docx, elements, styles) {
+function applyElementsAndStyles(docx, elements, styles = {}) {
   elements.forEach(element => {
     let options = {
       color: styles.textColor || '#000000',
-      font_face: styles.fontFamily.body || 'Calibri',
+      font_face: styles.fontFamily?.body || 'Calibri',
       font_size: 12
     };
 
