@@ -86,8 +86,7 @@ exports.createDocxWithStructure = async (elements, styles, outputPath = 'documen
     applyElementsAndStyles(docx, elements, styles);
 
     // Define the output stream
-    const out = fs.createWriteStream(path.join(__dirname, '..', '..', 'examples', outputPath));
-
+    const out = fs.createWriteStream(outputPath);
     out.on('error', (err) => {
       console.error('File stream error:', err);
       reject(err);
