@@ -4,11 +4,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to apply elements and styles to a DOCX document
-function applyElementsAndStyles(docx, elements, styles) {
+function applyElementsAndStyles(docx, elements, styles = {}) {
   elements.forEach(element => {
     let options = {
       color: styles.textColor || '#000000',
-      font_face: styles.fontFamily.body || 'Calibri',
+      font_face: styles.fontFamily?.body || 'Calibri',
       font_size: 12
     };
 
@@ -49,8 +49,26 @@ function applyElementsAndStyles(docx, elements, styles) {
         let footnote = docx.createP();
         footnote.addText(element.text, { ...options, italic: true});
         break;
+      case 'codeBlock':
+        let codeBlock = docx.createP();
+        codeBlock.addText(element.text, { font_face: 'Courier New', font_size: 10 });
+        break;
+      case 'table':
+        docx.createTable(element.table, element.tableStyle);
+        break;
+      case 'image':
+        let imageParagraph = docx.createP();
+        imageParagraph.addImage(path.resolve(__dirname, element.path), element.options);
+        break;
+      case 'pageBreak':
+        docx.putPageBreak();
+        break;
+      case 'horizontalLine':
+        let lineParagraph = docx.createP();
+        lineParagraph.addHorizontalLine();
+        break;
       default:
-        console.log(`Unsupported element type: ${element.type}`);
+        console.warn(`Unsupported element type: ${element.type}`);
         let unsupported = docx.createP();
         unsupported.addText(element.text, options);
         break;
@@ -68,8 +86,7 @@ exports.createDocxWithStructure = async (elements, styles, outputPath = 'documen
     applyElementsAndStyles(docx, elements, styles);
 
     // Define the output stream
-    const out = fs.createWriteStream(path.join(__dirname, '..', '..', 'examples', outputPath));
-
+    const out = fs.createWriteStream(outputPath);
     out.on('error', (err) => {
       console.error('File stream error:', err);
       reject(err);

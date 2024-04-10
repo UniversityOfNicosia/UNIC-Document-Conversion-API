@@ -182,3 +182,4 @@ __pycache__/
 
 # Ingone generaed files
 converted_files/
+*.docx

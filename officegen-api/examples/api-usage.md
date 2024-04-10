@@ -62,6 +62,99 @@ Content-Type: application/json
 }
 ```
 
+<details>
+  <summary>Advanced example</summary>
+
+```json
+{
+  "elements": [
+    {
+      "type": "title",
+      "text": "Document Title"
+    },
+    {
+      "type": "subtitle",
+      "text": "Document Subtitle"
+    },
+    {
+      "type": "paragraph",
+      "text": "This is a simple paragraph."
+    },
+    {
+      "type": "bullet",
+      "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+      ]
+    },
+    {
+      "type": "list",
+      "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+      ]
+    },
+    {
+      "type": "footnotes",
+      "text": "This is document footnotes"
+    },
+    {
+      "type": "codeBlock",
+      "text": "function helloWorld() {\n  console.log('Hello, world!');\n}"
+    },
+    {
+      "type": "table",
+      "table": [
+        [
+          {
+            "val": "Header 1",
+            "opts": {
+              "b": true,
+              "color": "000000",
+              "align": "center",
+              "shd": {
+                "fill": "92CDDC"
+              }
+            }
+          },
+          {
+            "val": "Header 2",
+            "opts": {
+              "b": true,
+              "color": "000000",
+              "align": "center",
+              "shd": {
+                "fill": "92CDDC"
+              }
+            }
+          }
+        ],
+        ["Row 1, Cell 1", "Row 1, Cell 2"],
+        ["Row 2, Cell 1", "Row 2, Cell 2"]
+      ],
+      "tableStyle": {
+        "tableColWidth": 4261,
+        "tableSize": 24,
+        "tableColor": "ada",
+        "tableAlign": "left",
+        "tableFontFamily": "Comic Sans MS"
+      }
+    }
+  ],
+  "styles": {
+    "textColor": "#000000",
+    "fontFamily": {
+      "title": "Arial",
+      "subtitle": "Times New Roman",
+      "body": "Calibri"
+    }
+  }
+}
+```
+</details>
+
 ### Response
 
 Upon successful document creation, the API will respond with a 201 status code and a JSON object containing the message and the path to the created document.
