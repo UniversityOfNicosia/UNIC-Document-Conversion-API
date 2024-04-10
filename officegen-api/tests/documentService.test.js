@@ -1,29 +1,29 @@
 const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
-const {
-  createDocumentWithStructure,
-  createDocumentBuffer,
-} = require("../src/documentLibrary");
+const { createDocumentWithStructure, createDocumentBuffer } = require("../src/documentLibrary");
 const { createDocxWithStructure } = require("../src/utils/officegenHelper");
 
+// Directory for test outputs
 const outDir = path.join(__dirname, "../tests_output/");
 
-// Helper to ensure the output directory exists
-beforeAll(async () => {
+// Ensure the output directory exists before running tests
+beforeAll(() => {
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
   }
 });
 
+// Main test suite for document conversion functionalities
 describe("Document Conversion API Tests", () => {
-  it("creates a document with various elements and styles", async () => {
+
+  // Test for creating a document with mixed content types
+  it("should create a document with titles, text, and code blocks", async () => {
     const elements = [
       { type: "title", text: "Document Title" },
       { type: "subtitle", text: "Subtitle here" },
       { type: "text", text: "Some basic text" },
       { type: "codeBlock", text: 'console.log("Hello, world!");' },
-      // Add a table element example if applicable
     ];
     const styles = {
       textColor: "#000000",
@@ -34,39 +34,36 @@ describe("Document Conversion API Tests", () => {
       },
     };
     const outputPath = path.join(outDir, "testDocument.docx");
+
     await createDocxWithStructure(elements, styles, outputPath);
 
-    // Verify the document is created
-    assert(fs.existsSync(outputPath), "The document should exist");
+    // Verify document creation
+    assert(fs.existsSync(outputPath), "Document should be successfully created");
   });
 
-  it("generates a document buffer with content", async () => {
-    const elements = [{ type: "paragraph", text: "Paragraph with buffer" }];
-    const styles = {};
+  // Test for generating a document buffer
+  it("should generate a buffer for a document with paragraph content", async () => {
+    const elements = [{ type: "paragraph", text: "Paragraph within a buffer" }];
+    const buffer = await createDocumentBuffer(elements, {});
 
-    const buffer = await createDocumentBuffer(elements, styles);
-    assert(buffer instanceof Buffer, "Should return a buffer");
-    assert(buffer.length > 0, "Buffer should not be empty");
+    // Buffer validations
+    assert(buffer instanceof Buffer, "Should return a valid buffer");
+    assert(buffer.length > 0, "Generated buffer should not be empty");
   });
 
-  it("creates a document with a table", async () => {
+  // Test for creating a document with a table
+  it("should create a document with a table", async () => {
     const elements = [
       { type: "title", text: "Document with Table" },
       {
         type: "table",
         table: [
-          // Define the table header
+          // Table header
           [
-            {
-              val: "Header 1",
-              opts: { b: true, sz: "24", shd: { fill: "cccccc" } },
-            },
-            {
-              val: "Header 2",
-              opts: { b: true, sz: "24", shd: { fill: "cccccc" } },
-            },
+            { val: "Header 1", opts: { b: true, sz: "24", shd: { fill: "cccccc" } }},
+            { val: "Header 2", opts: { b: true, sz: "24", shd: { fill: "cccccc" } }},
           ],
-          // Define a few rows of content
+          // Table rows
           ["Row 1, Cell 1", "Row 1, Cell 2"],
           ["Row 2, Cell 1", "Row 2, Cell 2"],
         ],
@@ -87,9 +84,11 @@ describe("Document Conversion API Tests", () => {
       },
     };
     const outputPath = path.join(outDir, "testDocumentWithTable.docx");
+
     await createDocxWithStructure(elements, styles, outputPath);
 
-    // Verify the document is created
-    assert(fs.existsSync(outputPath), "The document with a table should exist");
+    // Verify table document creation
+    assert(fs.existsSync(outputPath), "Document with a table should be successfully created");
   });
+
 });
