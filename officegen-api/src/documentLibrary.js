@@ -21,3 +21,11 @@ exports.createDocumentBuffer = async (elements, styles) => {
     throw error;
   }
 };
+
+exports.createPresentationWithStructure = async (elements, styles) => {
+  return "Hello, world! Presentation created.";
+};
+
+exports.createPresentationBuffer = async (elements, styles) => {
+  return "Hello, world! Presentation buffer created.";
+}

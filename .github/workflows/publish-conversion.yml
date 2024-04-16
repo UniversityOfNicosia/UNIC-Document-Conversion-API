@@ -1,4 +1,4 @@
-name: Publish NPM Package
+name: Publish Document Conversion NPM Package
 
 on:
   push:
@@ -16,8 +16,8 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@universityofnicosia'
       - run: npm install
-        working-directory: officegen-api/
+        working-directory: privateomega-lib/
       - run: npm publish
-        working-directory: officegen-api/
+        working-directory: privateomega-lib/
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
