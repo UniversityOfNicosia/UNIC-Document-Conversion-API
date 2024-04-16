@@ -7,6 +7,8 @@
     "start": "node src/app.js",
     "test": "jest"
   },
+  "author": "HlexNC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",
     "officegen": "^0.6.5",
