@@ -1,0 +1,20 @@
+{
+  "name": "@universityofnicosia/unic-document-conversion-library",
+  "version": "0.0.1",
+  "description": "A library for document conversion using html-to-docx",
+  "main": "src/documentLibrary.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "HlexNC",
+  "license": "ISC",
+  "dependencies": {
+    "html-to-docx": "^1.8.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@universityofnicosia"
+  }
+}
