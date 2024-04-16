@@ -14,8 +14,8 @@ beforeAll(() => {
   }
 });
 
-// Main test suite for document conversion functionalities
-describe("Document Conversion API Tests", () => {
+// Main test suite for document generator functionalities
+describe("Document Gen API Tests", () => {
 
   // Test for creating a document with mixed content types
   it("should create a document with titles, text, and code blocks", async () => {

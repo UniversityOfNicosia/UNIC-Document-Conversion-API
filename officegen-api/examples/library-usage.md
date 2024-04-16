@@ -1,8 +1,8 @@
-# UNIC Document Conversion Library - Usage Guide
+# UNIC Document Gen Library - Usage Guide
 
 ## Introduction
 
-The UNIC Document Conversion Library is a powerful Node.js module that enables the creation of `.docx` documents from structured JSON inputs. Built on top of the `officegen` library, it offers a flexible way to generate documents with custom styles and various elements such as text, titles, subtitles, lists, bullets, and footnotes.
+The UNIC Document Generator Library is a powerful Node.js module that enables the creation of `.docx` documents from structured JSON inputs. Built on top of the `officegen` library, it offers a flexible way to generate documents with custom styles and various elements such as text, titles, subtitles, lists, bullets, and footnotes.
 
 This guide covers the process of setting up, installing, and using this private NPM package within your projects.
 
@@ -26,14 +26,14 @@ Since this package is hosted on the GitHub Packages registry associated with the
    ```
 3. Install the package using npm:
    ```bash
-   npm install @universityofnicosia/unic-document-conversion-library --save
+   npm install @universityofnicosia/unic-document-gen-library --save
    ```
 
 ## Setting Up Your Project
 
 1. **Create a new Node.js project** (if you haven't already) by running `npm init` in your project directory and following the prompts.
 
-2. **Install the UNIC Document Conversion Library** using the command provided in the Installation section above.
+2. **Install the UNIC Document Gen Library** using the command provided in the Installation section above.
 
 ## Usage
 
@@ -44,7 +44,7 @@ To use the library, you need to import it into your Node.js application, configu
 Here's a basic example of how to use the library:
 
 ```javascript
-const documentLibrary = require('@universityofnicosia/unic-document-conversion-library');
+const documentLibrary = require('@universityofnicosia/unic-document-gen-library');
 
 // Define your document structure and styles
 const inputJson = {
@@ -78,7 +78,7 @@ The library provides error handling mechanisms. Ensure your application properly
 
 ## Advanced Usage
 
-For more complex documents, refer to the `officegen` documentation to understand all supported elements and styles. The UNIC Document Conversion Library supports these features as part of the `inputJson` configuration.
+For more complex documents, refer to the `officegen` documentation to understand all supported elements and styles. The UNIC Document Generator Library supports these features as part of the `inputJson` configuration.
 
 ## Contributing
 
