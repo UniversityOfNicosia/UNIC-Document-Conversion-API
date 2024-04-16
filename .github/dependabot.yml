@@ -16,14 +16,12 @@ updates:
     reviewers:
       - "HlexNC"
 
-# Interval can be 'live', 'daily', 'weekly', or 'monthly'
-
-
   - package-ecosystem: "npm"
-    directory: "/officegen-api"
+    directory: "/privateomega-lib"
     schedule:
       interval: "weekly"
       day: "monday"
-    target-branch: "feature/npm-package"
     reviewers:
       - "HlexNC"
+
+# Interval can be 'live', 'daily', 'weekly', or 'monthly'
