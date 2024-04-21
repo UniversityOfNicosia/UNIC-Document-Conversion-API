@@ -11,7 +11,7 @@ on:
 
 jobs:
   bump-version:
-    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'Upgrade') && contains(github.event.pull_request.title, 'Upgrade') && contains(github.event.pull_request.title, '/document-conversion') }}
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.title, 'Upgrade') && contains(github.event.pull_request.title, '/document-conversion') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
