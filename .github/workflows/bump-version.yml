@@ -2,9 +2,7 @@ name: Bump Version Workflow
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled, unlabeled]
-    branches:
-      - main
+    branches: [ "main" ]
     paths:
       - 'document-conversion/package.json'
       - 'document-conversion/package-lock.json'
