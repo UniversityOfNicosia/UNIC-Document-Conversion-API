@@ -4,7 +4,9 @@
             "extensions": [
                 "ms-azuretools.vscode-docker",
                 "github.vscode-github-actions",
-                "mhutchie.git-graph"
+                "mhutchie.git-graph",
+                "GitHub.copilot",
+                "GitHub.copilot-chat"
             ]
         }
     }
