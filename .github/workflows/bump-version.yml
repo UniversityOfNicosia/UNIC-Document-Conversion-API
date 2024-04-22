@@ -2,7 +2,7 @@ name: Bump Version Workflow
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, labeled, unlabeled]
     branches:
       - main
     paths:
@@ -11,7 +11,6 @@ on:
 
 jobs:
   bump-version:
-    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.title, 'Upgrade') && contains(github.event.pull_request.title, '/document-conversion') }}
     runs-on: ubuntu-latest
     if: >
       github.actor == 'dependabot[bot]' &&
