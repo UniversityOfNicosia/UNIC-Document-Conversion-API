@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     if: >
       github.actor == 'dependabot[bot]' &&
-      contains(github.event.pull_request.labels.*.name, 'Upgrade: Bump') &&
       contains(github.event.pull_request.title, 'Upgrade: Bump') &&
       contains(github.event.pull_request.title, '/document-conversion')
     steps:
