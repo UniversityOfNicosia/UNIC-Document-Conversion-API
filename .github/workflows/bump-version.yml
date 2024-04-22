@@ -11,14 +11,20 @@ on:
 
 jobs:
   bump-version:
-    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'Upgrade') && contains(github.event.pull_request.title, 'Upgrade') && contains(github.event.pull_request.title, '/document-conversion') }}
     runs-on: ubuntu-latest
+    if: >
+      github.actor == 'dependabot[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'Upgrade: Bump') &&
+      contains(github.event.pull_request.title, 'Upgrade: Bump') &&
+      contains(github.event.pull_request.title, '/document-conversion')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
 
@@ -27,7 +33,6 @@ jobs:
         working-directory: ./document-conversion
 
       - name: Bump Version
-        id: bump
         run: |
           cd document-conversion
           npm version patch --no-git-tag-version
@@ -42,3 +47,7 @@ jobs:
           git add document-conversion/package.json document-conversion/package-lock.json
           git commit -m "chore: bump version [skip ci]"
           git push
+        env:
+          GIT_COMMITTER_NAME: GitHub Actions
+          GIT_COMMITTER_EMAIL: actions@github.com
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
