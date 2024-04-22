@@ -2,7 +2,7 @@ name: Bump Version Workflow
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled, unlabeled]
+    types: [opened, synchronize]
     branches:
       - main
     paths:
