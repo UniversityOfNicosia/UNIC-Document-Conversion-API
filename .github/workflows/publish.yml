@@ -5,7 +5,8 @@ on:
     branches:
       - main
       - feature/npm-package
-
+permissions:
+  contents: write
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
@@ -39,14 +40,12 @@ jobs:
       - name: Increment package version
         if: steps.publish.outcome == 'failure'
         run: |
-          npm version patch -m "chore: bump version [skip ci]"
+          npm version patch
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-        working-directory: officegen-api/
-
-      - name: Push changes
-        if: steps.publish.outcome == 'failure'
-        run: git push
+          git add .
+          git commit -m "chore: bump version [skip ci]"
+          git push
         working-directory: officegen-api/
 
       - name: Publish package again
