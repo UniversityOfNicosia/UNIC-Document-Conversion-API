@@ -40,9 +40,10 @@ jobs:
       - name: Increment package version
         if: steps.publish.outcome == 'failure'
         run: |
-          npm version patch
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git pull origin
+          npm version patch
           git add .
           git commit -m "chore: bump version [skip ci]"
           git push
