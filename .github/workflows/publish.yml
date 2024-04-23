@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/npm-package
 permissions:
   contents: write
   packages: write
@@ -33,10 +32,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-
-      - name: Check for publish error
-        if: steps.publish.outcome == 'failure'
-        run: echo "Publish failed due to existing version"
 
       - name: Increment package version
         if: steps.publish.outcome == 'failure'
