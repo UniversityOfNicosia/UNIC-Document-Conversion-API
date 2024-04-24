@@ -48,18 +48,18 @@ The API responds with the path to the created document upon success.
 
 ### Library Usage
 
-The Document Conversion Solutions Library enables creation of documents via a Node.js module. Install the library from GitHub Packages, configure your `.npmrc` for authentication, and use the library in your projects.
+The UNIC Document Conversion Library enables creation of documents via a Node.js module. Install the library from GitHub Packages, configure your `.npmrc` for authentication, and use the library in your projects.
 
 **Installation:**
 
 ```bash
-npm install @ --save
+npm install @universityofnicosia/unic-document-conversion-library --save
 ```
 
 **Example Usage:**
 
 ```javascript
-const documentLibrary = require('@');
+const documentLibrary = require('@universityofnicosia/unic-document-conversion-library');
 
 const inputJson = {
   "elements": [...],
