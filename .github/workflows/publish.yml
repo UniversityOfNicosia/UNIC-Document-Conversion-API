@@ -2,7 +2,7 @@ name: Publish NPM Package Workflow
 
 on:
   push:
-    branches: [ "main", "feature/unified-publish"]
+    branches: [ "main" ]
 
 permissions:
   contents: write
