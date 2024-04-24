@@ -1,9 +1,8 @@
 const officegenHelper = require('./utils/officegenHelper');
 
 exports.createDocumentWithStructure = async (elements, styles) => {
+  if (!elements) throw new Error('Document elements are required.');
   try {
-    if (!elements) throw new Error('Document elements are required.');
-
     const timestamp = new Date().getTime();
     const outputPath = `document_${timestamp}.docx`;
     const resultPath = await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
@@ -14,6 +13,7 @@ exports.createDocumentWithStructure = async (elements, styles) => {
 };
 
 exports.createDocumentBuffer = async (elements, styles) => {
+  if (!elements) throw new Error('Document elements are required.');
   try {
     const buffer = await officegenHelper.createDocxBuffer(elements, styles);
     return buffer;
