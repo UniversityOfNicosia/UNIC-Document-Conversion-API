@@ -43,6 +43,7 @@ jobs:
           npm version patch
           git add .
           git commit -m "chore: bump version [skip ci]"
+          git pull origin
           git push
         working-directory: officegen-api/
 
