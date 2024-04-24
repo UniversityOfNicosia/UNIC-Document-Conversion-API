@@ -1,26 +1,23 @@
 version: 2
-updates:  
+updates:
   - package-ecosystem: "npm"
     directory: "/officegen-api"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
     reviewers:
       - "HlexNC"
 
   - package-ecosystem: "pip"
     directory: "/python-api"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
     reviewers:
       - "HlexNC"
 
   - package-ecosystem: "npm"
     directory: "/privateomega-lib"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "daily"
     reviewers:
       - "HlexNC"
 
