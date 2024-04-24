@@ -1,0 +1,123 @@
+name: Publish NPM Package Workflow
+
+on:
+  push:
+    branches: [ "main", "feature/unified-publish"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    outputs:
+      publish_conversion: ${{ steps.filter.outputs.publish_conversion }}
+      publish_generation: ${{ steps.filter.outputs.publish_generation }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check for changes in privateomega-lib
+        id: privateomega
+        run: |
+          echo "::set-output name=publish_conversion::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'privateomega-lib/' && echo 'true' || echo 'false')"
+
+      - name: Check for changes in officegen-api
+        id: officegen
+        run: |
+          echo "::set-output name=publish_generation::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'officegen-api/' && echo 'true' || echo 'false')"
+
+  publish-conversion:
+    needs: check-updates
+    if: needs.check-updates.outputs.publish_conversion == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@universityofnicosia'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: privateomega-lib/
+
+      - name: Publish package
+        id: publish
+        run: npm publish
+        working-directory: privateomega-lib/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Increment package version
+        if: steps.publish.outcome == 'failure'
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git pull origin
+          npm version patch
+          git add .
+          git commit -m "chore: bump version [skip ci]"
+          git pull origin
+          git push
+        working-directory: privateomega-lib/
+
+      - name: Publish package again
+        if: steps.publish.outcome == 'failure'
+        run: npm publish
+        working-directory: privateomega-lib/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-generation:
+    needs: check-updates
+    if: needs.check-updates.outputs.publish_generation == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@universityofnicosia'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: officegen-api/
+
+      - name: Publish package
+        id: publish
+        run: npm publish
+        working-directory: officegen-api/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Increment package version
+        if: steps.publish.outcome == 'failure'
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git pull origin
+          npm version patch
+          git add .
+          git commit -m "chore: bump version [skip ci]"
+          git pull origin
+          git push
+        working-directory: officegen-api/
+
+      - name: Publish package again
+        if: steps.publish.outcome == 'failure'
+        run: npm publish
+        working-directory: officegen-api/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
