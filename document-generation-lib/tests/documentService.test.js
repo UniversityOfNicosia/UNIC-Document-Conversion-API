@@ -5,7 +5,7 @@ const { createDocumentBuffer } = require("../src/documentLibrary");
 const { createDocxWithStructure } = require("../src/utils/officegenHelper");
 
 // Directory for test outputs
-const outDir = path.join(__dirname, "../tests_output/");
+const outDir = path.join(__dirname, "./tests_out/");
 
 // Ensure the output directory exists before running tests
 beforeAll(() => {
