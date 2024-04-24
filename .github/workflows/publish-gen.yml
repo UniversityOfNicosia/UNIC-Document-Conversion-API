@@ -2,11 +2,12 @@ name: Publish Document Gen NPM Package
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+
 permissions:
   contents: write
   packages: write
+
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
