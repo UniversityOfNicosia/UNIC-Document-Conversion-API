@@ -1,4 +1,4 @@
-// Mock necessary modules
+// Mock modules
 jest.mock("../src/documentLibrary", () => ({
   createDocumentBuffer: jest.fn()
 }));
@@ -23,7 +23,6 @@ const assert = require("assert");
 
 const outDir = path.join(__dirname, "./tests_out/");
 
-// Ensure the output directory exists before running tests
 beforeAll(() => {
   fs.existsSync.mockReturnValue(false);
   fs.mkdirSync.mockImplementation(() => {});
@@ -53,7 +52,7 @@ describe("DocumentService", () => {
         }
       };
       const outputPath = path.join(outDir, "testDocument.docx");
-      fs.existsSync.mockReturnValueOnce(true);  // Simulate file creation success
+      fs.existsSync.mockReturnValueOnce(true);
 
       await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
 
@@ -92,7 +91,7 @@ describe("DocumentService", () => {
       ];
       const styles = { textColor: "#000000", fontFamily: { body: "Calibri", title: "Arial" } };
       const outputPath = path.join(outDir, "testDocumentWithTable.docx");
-      fs.existsSync.mockReturnValueOnce(true);  // Simulate file creation success
+      fs.existsSync.mockReturnValueOnce(true);
 
       await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
 
@@ -107,7 +106,7 @@ describe("DocumentService", () => {
       ];
       const styles = { textColor: "#000000", fontFamily: { body: "Calibri", title: "Arial" } };
       const outputPath = path.join(outDir, "testDocumentWithImage.docx");
-      fs.existsSync.mockReturnValueOnce(true);  // Simulate file creation success
+      fs.existsSync.mockReturnValueOnce(true);
 
       await officegenHelper.createDocxWithStructure(elements, styles, outputPath);
 
