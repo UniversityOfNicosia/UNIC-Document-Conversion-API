@@ -183,3 +183,4 @@ __pycache__/
 # Ingone generaed files
 converted_files/
 *.docx
+document-generation-lib/src/utils/downloaded_image.png

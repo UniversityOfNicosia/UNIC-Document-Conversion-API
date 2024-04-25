@@ -7,7 +7,7 @@ const path = require('path');
 // Function to download an image from a URL and return the path
 function downloadImage(url) {
   return new Promise((resolve, reject) => {
-    const imagePath = path.resolve(__dirname, "downloaded_image.jpg");
+    const imagePath = path.resolve(__dirname, "downloaded_image.png");
     https.get(url, (response) => {
       if (response.statusCode !== 200) {
         reject(new Error(`Failed to download image: Status code ${response.statusCode}`));
@@ -87,7 +87,9 @@ function applyElementsAndStyles(docx, elements, styles = {}) {
         const imageParagraph = docx.createP();
         try {
           const imagePath = await downloadImage(element.src);
+          
           imageParagraph.addImage(imagePath, element.options);
+          console.log(`Added image from ${element.src}`);
         } catch (err) {
           console.error(`Error adding image to document: ${err.message}`);
         }
