@@ -1,11 +1,38 @@
 const officegen = require('officegen');
 const streamBuffers = require('stream-buffers');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+// Function to download an image from a URL and return the path
+function downloadImage(url) {
+  return new Promise((resolve, reject) => {
+    const imagePath = path.resolve(__dirname, "downloaded_image.jpg");
+    https.get(url, (response) => {
+      if (response.statusCode !== 200) {
+        reject(new Error(`Failed to download image: Status code ${response.statusCode}`));
+        return;
+      }
+      const fileStream = fs.createWriteStream(imagePath);
+      response.pipe(fileStream);
+      fileStream.on('finish', () => {
+        fileStream.close(() => {
+          resolve(imagePath);
+        });
+      });
+      fileStream.on('error', (err) => {
+        fs.unlink(imagePath, () => reject(err));
+      });
+    }).on('error', (err) => {
+      console.error('Failed to download image:', err);
+      reject(err);
+    });
+  });
+}
+
 // Function to apply elements and styles to a DOCX document
 function applyElementsAndStyles(docx, elements, styles = {}) {
-  elements.forEach(element => {
+  elements.forEach(async element => {
     let options = {
       color: styles.textColor || '#000000',
       font_face: styles.fontFamily?.body || 'Calibri',
@@ -57,8 +84,13 @@ function applyElementsAndStyles(docx, elements, styles = {}) {
         docx.createTable(element.table, element.tableStyle);
         break;
       case 'image':
-        let imageParagraph = docx.createP();
-        imageParagraph.addImage(path.resolve(__dirname, element.path), element.options);
+        const imageParagraph = docx.createP();
+        try {
+          const imagePath = await downloadImage(element.src);
+          imageParagraph.addImage(imagePath, element.options);
+        } catch (err) {
+          console.error(`Error adding image to document: ${err.message}`);
+        }
         break;
       case 'pageBreak':
         docx.putPageBreak();
