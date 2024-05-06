@@ -1,6 +1,6 @@
-# Officegen API and Library for Document Conversion
+# Document Generation API and Library for Document Conversion
 
-The Officegen API and Library offer a powerful way to generate `.docx` documents from structured JSON inputs. This guide provides an overview of both the API and the Node.js library usage.
+The Document Generation API and Library offer a powerful way to generate `.docx` documents from structured JSON inputs. This guide provides an overview of both the API and the Node.js library usage.
 
 ## Features
 

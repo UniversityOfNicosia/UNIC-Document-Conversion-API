@@ -18,15 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check for changes in privateomega-lib
-        id: privateomega
+      - name: Check for changes in document-conversion-lib
+        id: conversion
         run: |
-          echo "::set-output name=publish_conversion::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'privateomega-lib/' && echo 'true' || echo 'false')"
+          echo "::set-output name=publish_conversion::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'document-generation-lib/' && echo 'true' || echo 'false')"
 
-      - name: Check for changes in officegen-api
-        id: officegen
+      - name: Check for changes in document-generation-lib
+        id: generation
         run: |
-          echo "::set-output name=publish_generation::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'officegen-api/' && echo 'true' || echo 'false')"
+          echo "::set-output name=publish_generation::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'document-generation-lib/' && echo 'true' || echo 'false')"
 
   publish-conversion:
     needs: check-updates
@@ -45,12 +45,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: privateomega-lib/
+        working-directory: document-generation-lib/
 
       - name: Publish package
         id: publish
         run: npm publish
-        working-directory: privateomega-lib/
+        working-directory: document-generation-lib/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
@@ -66,12 +66,12 @@ jobs:
           git commit -m "chore: bump version [skip ci]"
           git pull origin
           git push
-        working-directory: privateomega-lib/
+        working-directory: document-generation-lib/
 
       - name: Publish package again
         if: steps.publish.outcome == 'failure'
         run: npm publish
-        working-directory: privateomega-lib/
+        working-directory: document-generation-lib/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -92,12 +92,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: officegen-api/
+        working-directory: document-generation-lib/
 
       - name: Publish package
         id: publish
         run: npm publish
-        working-directory: officegen-api/
+        working-directory: document-generation-lib/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
@@ -113,11 +113,11 @@ jobs:
           git commit -m "chore: bump version [skip ci]"
           git pull origin
           git push
-        working-directory: officegen-api/
+        working-directory: document-generation-lib/
 
       - name: Publish package again
         if: steps.publish.outcome == 'failure'
         run: npm publish
-        working-directory: officegen-api/
+        working-directory: document-generation-lib/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
