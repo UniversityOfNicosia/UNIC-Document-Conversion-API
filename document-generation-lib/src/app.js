@@ -1,12 +1,12 @@
 const express = require('express');
-const documentLibrary = require('./documentLibrary');
+const documentManager = require('./lib/documentManager')
 
 const app = express();
 app.use(express.json());
 
-app.post('/api/create-document', async (req, res) => {
+router.post('/create-document', async (req, res) => {
   try {
-    const resultPath = await documentLibrary.createDocumentWithStructure(req.body.elements, req.body.styles);
+    const resultPath = await documentManager.createDocumentWithStructure(req.body.elements, req.body.styles);
     res.status(201).send({ message: 'Document created successfully.', path: resultPath });
   } catch (error) {
     console.error('Failed to create document:', error);
@@ -14,9 +14,9 @@ app.post('/api/create-document', async (req, res) => {
   }
 });
 
-app.post('/api/create-document/buffer', async (req, res) => {
+router.post('/create-document/buffer', async (req, res) => {
   try {
-    const buffer = await documentLibrary.createDocumentBuffer(req.body.elements, req.body.styles);
+    const buffer = await documentManager.createDocumentBuffer(req.body.elements, req.body.styles);
     res.setHeader('Content-Disposition', 'attachment; filename=document.docx');
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.send(buffer);

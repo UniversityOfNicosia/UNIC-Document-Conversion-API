@@ -1,7 +1,7 @@
 const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
-const { createDocumentWithStructure, createDocumentBuffer } = require("../src/documentLibrary");
+const { createDocumentBuffer } = require("../src/lib/documentManager");
 const { createDocxWithStructure } = require("../src/utils/officegenHelper");
 
 // Directory for test outputs
