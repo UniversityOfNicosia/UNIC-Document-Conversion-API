@@ -78,7 +78,7 @@ documentLibrary.createDocumentWithStructure(inputJson)
 
 ## Documentation
 
-For more detailed examples and error handling, please refer to the `api-usage.md` and `library-usage.md` files in the `examples` directory.
+For more detailed examples and error handling, please refer to the [GitHub Wiki](https://github.com/UniversityOfNicosia/UNIC-Document-Conversion-API/wiki/document%E2%80%90generation%E2%80%90lib)
 
 ## Contributing
 
