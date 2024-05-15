@@ -1,0 +1,25 @@
+{
+  "name": "@universityofnicosia/unic-presentation-gen-library",
+  "version": "0.0.1",
+  "description": "A library and API for presentation creation using officegen",
+  "main": "src/lib/presentationManager.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest"
+  },
+  "author": "HlexNC",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "officegen": "^0.6.5",
+    "stream-buffers": "^3.0.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@universityofnicosia"
+  }
+}
