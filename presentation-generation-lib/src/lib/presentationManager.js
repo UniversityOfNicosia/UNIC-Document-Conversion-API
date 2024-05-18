@@ -1,5 +1,24 @@
 const fs = require('fs');
 const officegen = require('officegen');
+const axios = require('axios');
+const path = require('path');
+const os = require('os');
+
+/**
+ * Downloads an image from a URL and saves it to a temporary file.
+ * @param {string} url - The image URL.
+ * @returns {Promise<string>} - The path to the downloaded image file.
+ */
+async function downloadImage(url) {
+  const response = await axios({
+    url,
+    responseType: 'arraybuffer',
+  });
+
+  const imagePath = path.join(os.tmpdir(), path.basename(url));
+  fs.writeFileSync(imagePath, response.data);
+  return imagePath;
+}
 
 /**
  * Creates a presentation with the given structure and saves it to the specified path.
@@ -9,7 +28,7 @@ const officegen = require('officegen');
  * @returns {Promise<void>}
  */
 async function createPresentationWithStructure(slides, styles, outputPath) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     if (!slides || slides.length === 0) {
       reject(new Error('Slides are required.'));
       return;
@@ -17,17 +36,22 @@ async function createPresentationWithStructure(slides, styles, outputPath) {
 
     const pptx = officegen('pptx');
 
-    slides.forEach((slideData) => {
+    for (const slideData of slides) {
       const slide = pptx.makeTitleSlide(slideData.title, slideData.subTitle);
 
       if (slideData.elements && slideData.elements.length > 0) {
-        slideData.elements.forEach((element) => {
+        for (const element of slideData.elements) {
           switch (element.type) {
             case 'text':
               slide.addText(element.text, element.options);
               break;
             case 'image':
-              slide.addImage(element.imageUrl, element.options);
+              try {
+                const imagePath = await downloadImage(element.imageUrl);
+                slide.addImage(imagePath, element.options);
+              } catch (error) {
+                reject(error);
+              }
               break;
             case 'table':
               slide.addTable(element.tableData, element.options);
@@ -38,9 +62,9 @@ async function createPresentationWithStructure(slides, styles, outputPath) {
             default:
               console.warn(`Unknown element type: ${element.type}`);
           }
-        });
+        }
       }
-    });
+    }
 
     const out = fs.createWriteStream(outputPath);
     pptx.generate(out);
@@ -57,20 +81,25 @@ async function createPresentationWithStructure(slides, styles, outputPath) {
  * @returns {Promise<Buffer>}
  */
 async function createPresentationBuffer(slides, styles) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const pptx = officegen('pptx');
 
-    slides.forEach((slideData) => {
+    for (const slideData of slides) {
       const slide = pptx.makeTitleSlide(slideData.title, slideData.subTitle);
 
       if (slideData.elements && slideData.elements.length > 0) {
-        slideData.elements.forEach((element) => {
+        for (const element of slideData.elements) {
           switch (element.type) {
             case 'text':
               slide.addText(element.text, element.options);
               break;
             case 'image':
-              slide.addImage(element.imageUrl, element.options);
+              try {
+                const imagePath = await downloadImage(element.imageUrl);
+                slide.addImage(imagePath, element.options);
+              } catch (error) {
+                reject(error);
+              }
               break;
             case 'table':
               slide.addTable(element.tableData, element.options);
@@ -81,20 +110,26 @@ async function createPresentationBuffer(slides, styles) {
             default:
               console.warn(`Unknown element type: ${element.type}`);
           }
-        });
+        }
       }
-    });
+    }
 
     const bufs = [];
-    pptx.on('data', (chunk) => bufs.push(chunk));
-    pptx.on('end', () => resolve(Buffer.concat(bufs)));
+    pptx.on('finalize', () => {
+      resolve(Buffer.concat(bufs));
+    });
     pptx.on('error', reject);
 
-    pptx.generate();
+    pptx.generate({
+      'finalize': function (written) {
+        bufs.push(Buffer.from(written, 'binary'));
+      },
+      'error': reject
+    });
   });
 }
 
 module.exports = {
   createPresentationWithStructure,
-  createPresentationBuffer
+  createPresentationBuffer,
 };

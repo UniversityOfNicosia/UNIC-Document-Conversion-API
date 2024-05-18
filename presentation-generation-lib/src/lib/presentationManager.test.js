@@ -37,12 +37,12 @@ describe('Presentation Manager Tests', () => {
         elements: [
           {
             type: 'chart',
-            title: 'Q1 Sales by Region',
+            chartType: 'bar',
             data: [
               { name: 'North America', labels: ['Jan', 'Feb', 'Mar'], values: [15000, 21000, 18000] },
               { name: 'Europe', labels: ['Jan', 'Feb', 'Mar'], values: [12000, 15000, 17000] }
             ],
-            chartType: 'bar'
+            options: {}
           }
         ]
       }
@@ -62,7 +62,7 @@ describe('Presentation Manager Tests', () => {
         title: 'Annual Growth',
         subTitle: '',
         elements: [
-          { type: 'image', imageUrl: 'https://pluspng.com/img-png/png-images--800.png', options: {} }
+          { type: 'image', imageUrl: 'https://via.placeholder.com/800.png', options: {} }
         ]
       },
       {
@@ -87,9 +87,10 @@ describe('Presentation Manager Tests', () => {
             type: 'chart',
             chartType: 'pie',
             data: [
-              { name: 'Product A', values: [30], color: 'FF0000' },
-              { name: 'Product B', values: [70], color: '00FF00' }
-            ]
+              { name: 'Product A', labels: ['Product A'], values: [30] },
+              { name: 'Product B', labels: ['Product B'], values: [70] }
+            ],
+            options: {}
           }
         ]
       }
@@ -121,7 +122,7 @@ describe('Presentation Manager Tests', () => {
         elements: [
           {
             type: 'image',
-            imageUrl: 'https://example.com/logo.png',
+            imageUrl: 'https://via.placeholder.com/150.png',
             options: {}
           }
         ]
