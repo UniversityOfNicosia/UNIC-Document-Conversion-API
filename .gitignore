@@ -184,3 +184,7 @@ __pycache__/
 converted_files/
 *.docx
 *.pptx
+*.xlsx
+*.pdf
+*.png
+*.jpg

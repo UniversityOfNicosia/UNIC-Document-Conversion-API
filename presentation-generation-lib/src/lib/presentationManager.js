@@ -10,12 +10,16 @@ const os = require('os');
  * @returns {Promise<string>} - The path to the downloaded image file.
  */
 async function downloadImage(url) {
+  const dirImages = path.join(__dirname, '/../images/');
+  if (!fs.existsSync(dirImages)) {
+    fs.mkdirSync(dirImages, { recursive: true });
+  }
   const response = await axios({
     url,
     responseType: 'arraybuffer',
   });
 
-  const imagePath = path.join(os.tmpdir(), path.basename(url));
+  const imagePath = path.join(dirImages, path.basename(url));
   fs.writeFileSync(imagePath, response.data);
   return imagePath;
 }
@@ -67,10 +71,10 @@ async function createPresentationWithStructure(slides, styles, outputPath) {
     }
 
     const out = fs.createWriteStream(outputPath);
-    pptx.generate(out);
-
     out.on('close', resolve);
     out.on('error', reject);
+
+    pptx.generate(out);
   });
 }
 
@@ -121,10 +125,10 @@ async function createPresentationBuffer(slides, styles) {
     pptx.on('error', reject);
 
     pptx.generate({
-      'finalize': function (written) {
+      finalize: function (written) {
         bufs.push(Buffer.from(written, 'binary'));
       },
-      'error': reject
+      error: reject,
     });
   });
 }

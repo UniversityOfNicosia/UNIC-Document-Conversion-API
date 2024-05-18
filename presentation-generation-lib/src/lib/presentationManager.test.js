@@ -52,7 +52,7 @@ describe('Presentation Manager Tests', () => {
     // Buffer validations
     expect(buffer).toBeInstanceOf(Buffer);
     expect(buffer.length).toBeGreaterThan(0);
-  });
+  }, 10000); // Increase timeout to 10000ms
 
   // Test for creating a presentation with multiple slide types
   it('should create a presentation with multiple slide types', async () => {
@@ -62,7 +62,16 @@ describe('Presentation Manager Tests', () => {
         title: 'Annual Growth',
         subTitle: '',
         elements: [
-          { type: 'image', imageUrl: 'https://via.placeholder.com/800.png', options: {} }
+          { 
+            type: 'image', 
+            imageUrl: 'https://via.placeholder.com/800.png', 
+            options: {
+              y: 0,
+              x: 0,
+              cy: '100%',
+              cx: '100%'
+            } 
+          }
         ]
       },
       {
@@ -102,7 +111,7 @@ describe('Presentation Manager Tests', () => {
 
     // Verify presentation creation
     expect(fs.existsSync(outputPath)).toBe(true);
-  });
+  }, 10000); // Increase timeout to 10000ms
 
   // Test for handling missing slide elements
   it('should throw an error for missing slide elements', async () => {
@@ -123,7 +132,12 @@ describe('Presentation Manager Tests', () => {
           {
             type: 'image',
             imageUrl: 'https://via.placeholder.com/150.png',
-            options: {}
+            options: {
+              y: 0,
+              x: 0,
+              cy: '100%',
+              cx: '100%'
+            }
           }
         ]
       }
@@ -133,5 +147,6 @@ describe('Presentation Manager Tests', () => {
     // Buffer validations
     expect(buffer).toBeInstanceOf(Buffer);
     expect(buffer.length).toBeGreaterThan(0);
-  });
+  }, 10000); // Increase timeout to 10000ms
 });
+
